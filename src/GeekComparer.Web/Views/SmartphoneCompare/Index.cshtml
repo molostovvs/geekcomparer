@@ -1,0 +1,196 @@
+@model SmartphoneViewModel
+
+@{
+    ViewData["Title"] = "TEST";
+}
+
+<form method="post" asp-controller="SmartphoneCompare" asp-action="AddToComparison">
+    <div>
+        <div class="row mt-3 mb-3 ">
+            <div class="form-label">Add phone to compare</div>
+            <div class="col col-md-3">
+                <input type="text"
+                       id="smartphones-search"
+                       class="form-control"
+                       placeholder="Add another..."
+                       list="all-smartphones"
+                       name="SmartphoneChoice"
+                       maxlength="20"/>
+
+                @foreach (var sm in Model.Comparison)
+                {
+                    <input type="hidden" name="comparisonIds" value="@sm.Id"/>
+                }
+
+            </div>
+            <div class="col col-md-1">
+                <button type="submit" class="btn btn-outline-primary">
+                    <i class="bi bi-plus-lg"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+<datalist id="all-smartphones">
+    @foreach (var phone in Model.Smartphones)
+    {
+        <option value="@phone.Brand @phone.Model"></option>
+    }
+</datalist>
+
+<div class="tablecontainer">
+    <table>
+        <thead>
+
+        <th>
+            Smartphone
+        </th>
+
+        @foreach (var phone in Model.Comparison)
+        {
+            <th>
+
+                <form method="post" asp-controller="SmartphoneCompare" asp-action="DeleteFromComparison">
+
+                    <input type="hidden" value="@phone.Id" name="idToDelete"/>
+                    @foreach (var sm in Model.Comparison)
+                    {
+                        <input type="hidden" name="comparisonIds" value="@sm.Id"/>
+                    }
+
+                    @phone.Brand @phone.Model
+                    <button type="submit" class="btn btn-outline-danger btn-sm">
+                        <i class="bi bi-x-lg"></i>
+                    </button>
+
+                </form>
+
+            </th>
+        }
+
+        </thead>
+
+        <tbody>
+        <tr class="text-center">
+            <th>
+                Id
+            </th>
+            @foreach (var smartphone in Model.Comparison)
+            {
+                <td>
+                    @smartphone.Id
+                </td>
+            }
+        </tr>
+
+        <tr class="text-center">
+            <th>
+                Brand
+            </th>
+            @foreach (var smartphone in Model.Comparison)
+            {
+                <td>
+                    @smartphone.Brand
+                </td>
+            }
+        </tr>
+
+        <tr class="text-center">
+            <th>
+                Model
+            </th>
+            @foreach (var smartphone in Model.Comparison)
+            {
+                <td>
+                    @smartphone.Model
+                </td>
+            }
+        </tr>
+
+        <tr class="text-center">
+            <th>
+                Release Date
+            </th>
+            @foreach (var smartphone in Model.Comparison)
+            {
+                <td>
+                    @smartphone.ReleaseDate
+                </td>
+            }
+        </tr>
+
+        @for (var i = 0; i < 20; i++)
+        {
+            <tr class="text-center">
+                <th>
+                    Head
+                </th>
+
+                @for (var j = 0; j < Model.Comparison.Count; j++)
+                {
+                    <td>
+                        @Model.Comparison[j].ReleaseDate
+                    </td>
+                }
+            </tr>
+        }
+
+        </tbody>
+    </table>
+</div>
+
+<style>
+
+table {
+	white-space: nowrap;
+	overflow-y: scroll;
+	/*border-collapse: collapse;*/
+}
+
+    /* Use overflow:scroll on your container to enable scrolling: */
+    
+div.tablecontainer {
+    height: 800px;
+    overflow-x: scroll;
+}
+    
+    
+    /* Use position: sticky to have it stick to the edge
+     * and top, right, or left to choose which edge to stick to: */
+    
+thead th {
+    position: sticky;
+    top: 0;
+}
+    
+tbody th {
+    position: sticky;
+    left: 0;
+}
+    
+thead th:first-child {
+    left: 0;
+    z-index: 2;
+}
+
+thead th {
+    background: #FFF;
+    color: #000;
+    z-index: 1;
+    box-shadow: 1px 1px 0 0 #ccc;
+}
+    
+tbody th {
+    background: #FFF;
+    border-right: 1px solid #CCC;
+      /* Browsers tend to drop borders on sticky elements, so we emulate the border-right using a box-shadow to ensure it stays: */
+    box-shadow: 1px 1px 0 0 #ccc;
+}
+    
+td, th {
+    padding: 0.5em;
+}
+
+</style>
