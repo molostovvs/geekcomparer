@@ -4,10 +4,10 @@
     ViewData["Title"] = "TEST";
 }
 
-<form method="post" asp-controller="SmartphoneCompare" asp-action="AddToComparison">
-    <div>
-        <div class="row mt-3 mb-3 ">
-            <div class="form-label">Add phone to compare</div>
+<div style="height: 10vh; min-height: 10vh; padding-top: 10px; padding-bottom: 10px">
+    <form method="post" asp-controller="Smartphone" asp-action="AddToComparison">
+        <div class="row mb-3 ">
+            <label class="form-label" asp-for="Smartphones">Add phone to compare</label>
             <div class="col col-md-3">
                 <input type="text"
                        id="smartphones-search"
@@ -29,8 +29,8 @@
                 </button>
             </div>
         </div>
-    </div>
-</form>
+    </form>
+</div>
 
 
 <datalist id="all-smartphones">
@@ -41,18 +41,19 @@
 </datalist>
 
 <div class="tablecontainer">
-    <table>
+
+    <table style="margin: auto">
         <thead>
 
-        <th>
-            Smartphone
+        <th class="text-center">
+            Phone
         </th>
 
         @foreach (var phone in Model.Comparison)
         {
             <th>
 
-                <form method="post" asp-controller="SmartphoneCompare" asp-action="DeleteFromComparison">
+                <form method="post" asp-controller="Smartphone" asp-action="DeleteFromComparison">
 
                     <input type="hidden" value="@phone.Id" name="idToDelete"/>
                     @foreach (var sm in Model.Comparison)
@@ -111,7 +112,7 @@
 
         <tr class="text-center">
             <th>
-                Release Date
+                Released
             </th>
             @foreach (var smartphone in Model.Comparison)
             {
@@ -121,7 +122,7 @@
             }
         </tr>
 
-        @for (var i = 0; i < 20; i++)
+        @for (var i = 0; i < 40; i++)
         {
             <tr class="text-center">
                 <th>
@@ -146,19 +147,14 @@
 table {
 	white-space: nowrap;
 	overflow-y: scroll;
-	/*border-collapse: collapse;*/
+	scroll-behavior: smooth;
 }
 
-    /* Use overflow:scroll on your container to enable scrolling: */
-    
 div.tablecontainer {
-    height: 800px;
+    height: 90vh;
     overflow-x: scroll;
+    padding-bottom: 10px;
 }
-    
-    
-    /* Use position: sticky to have it stick to the edge
-     * and top, right, or left to choose which edge to stick to: */
     
 thead th {
     position: sticky;

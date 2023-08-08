@@ -26,6 +26,9 @@ app.UseRouting();
 
 app.UseAuthorization();
 
-app.MapControllerRoute(name: "default", pattern: "{controller=SmartphoneCompare}/{action=Index}/{id?}");
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Smartphone}/{action=Index}/{comparisonIds=1_2}"
+);
 
 app.Run();

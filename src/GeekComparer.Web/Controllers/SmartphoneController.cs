@@ -3,11 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace GeekComparer.Web.Controllers;
 
-public class SmartphoneCompareController : Controller
+public class SmartphoneController : Controller
 {
-    private List<Smartphone> _smartphones = new List<Smartphone>()
+    private List<Smartphone> _smartphones = new List<Smartphone>
     {
-        new() { Id = 1, Brand = "Apple", Model = "IPhone Xr", ReleaseDate = "May 2019" },
+        new() { Id = 1, Brand = "Apple", Model = "iPhone Xr", ReleaseDate = "May 2019" },
         new() { Id = 2, Brand = "Realme", Model = "GT Neo 5 SE", ReleaseDate = "May 2023" },
         new() { Id = 3, Brand = "OnePlus", Model = "Nord 2", ReleaseDate = "January 2022" },
         new() { Id = 4, Brand = "Xiaomi", Model = "5S", ReleaseDate = "February 2022" },
@@ -18,16 +18,17 @@ public class SmartphoneCompareController : Controller
         new() { Id = 9, Brand = "Asus", Model = "ZenPhone 8", ReleaseDate = "July 2022" },
     };
 
-    [HttpGet]
-    public IActionResult Index(SmartphoneViewModel vm)
+    [HttpGet("/SmartphoneCompare/{comparisonIds}")]
+    public IActionResult Index(string comparisonIds)
     {
-        vm.Smartphones = _smartphones;
+        var vm = new SmartphoneViewModel();
 
-        if (vm.Comparison.Count == 0)
-            vm.Comparison = new List<Smartphone>()
-            {
-                new() { Id = 1, Brand = "Apple", Model = "IPhone Xr", ReleaseDate = "May 2019" },
-            };
+        vm.Smartphones = _smartphones; // DB Access imitation
+
+        var ids = comparisonIds.Split('_').Select(i => int.Parse(i)).ToArray();
+
+        foreach (var id in ids)
+            vm.Comparison.Add(_smartphones.First(s => s.Id == id));
 
         return View(vm);
     }
@@ -35,32 +36,25 @@ public class SmartphoneCompareController : Controller
     [HttpPost]
     public IActionResult AddToComparison(string smartphoneChoice, int[] comparisonIds)
     {
-        var vm = new SmartphoneViewModel();
-        vm.Smartphones = _smartphones;
-
-        foreach (var id in comparisonIds)
-            vm.Comparison.Add(_smartphones.First(s => s.Id == id));
-
         var brand = smartphoneChoice.Split(' ')[0];
         var modelSplitted = smartphoneChoice.Split(' ').Skip(1);
         var model = string.Join(' ', modelSplitted);
 
-        vm.Comparison.Add(_smartphones.Where(s => s.Brand == brand).First(s => s.Model == model));
+        var idToAdd = _smartphones.Where(s => s.Brand == brand)
+                                  .First(s => s.Model == model)
+                                  .Id.ToString();
 
-        return View("Index", vm);
+        var ids = string.Join('_', comparisonIds);
+        ids += $"_{idToAdd}";
+
+        return RedirectToAction("Index", "Smartphone", new { comparisonIds = ids });
     }
 
     [HttpPost]
     public IActionResult DeleteFromComparison(int idToDelete, int[] comparisonIds)
     {
-        var vm = new SmartphoneViewModel();
-        vm.Smartphones = _smartphones;
+        var ids = string.Join('_', comparisonIds.Where(id => id != idToDelete));
 
-        foreach (var id in comparisonIds)
-            vm.Comparison.Add(_smartphones.First(s => s.Id == id));
-
-        vm.Comparison.Remove(_smartphones.First(s => s.Id == idToDelete));
-
-        return View("Index", vm);
+        return RedirectToAction("Index", "Smartphone", new { comparisonIds = ids });
     }
 }
