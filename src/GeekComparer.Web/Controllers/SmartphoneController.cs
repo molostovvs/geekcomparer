@@ -18,7 +18,7 @@ public class SmartphoneController : Controller
         new() { Id = 9, Brand = "Asus", Model = "ZenPhone 8", ReleaseDate = "July 2022" },
     };
 
-    [HttpGet("/SmartphoneCompare/{comparisonIds}")]
+    [HttpGet("/Smartphone/{comparisonIds}")]
     public IActionResult Index(string comparisonIds)
     {
         var vm = new SmartphoneViewModel();

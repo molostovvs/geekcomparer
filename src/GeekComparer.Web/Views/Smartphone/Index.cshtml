@@ -4,34 +4,30 @@
     ViewData["Title"] = "TEST";
 }
 
-<div style="height: 10vh; min-height: 10vh; padding-top: 10px; padding-bottom: 10px">
-    <form method="post" asp-controller="Smartphone" asp-action="AddToComparison">
-        <div class="row mb-3 ">
-            <label class="form-label" asp-for="Smartphones">Add phone to compare</label>
-            <div class="col col-md-3">
-                <input type="text"
-                       id="smartphones-search"
-                       class="form-control"
-                       placeholder="Add another..."
-                       list="all-smartphones"
-                       name="SmartphoneChoice"
-                       maxlength="20"/>
+<form method="post" asp-controller="Smartphone" asp-action="AddToComparison" style="height: 60px; padding-top: 10px; padding-bottom: 10px;">
+    <div style="display: flex; flex-direction: row; justify-content: center; align-items: center">
+        <div class="m-1">
+            <input type="text"
+                   id="smartphones-search"
+                   class="form-control"
+                   placeholder="Add another..."
+                   list="all-smartphones"
+                   name="SmartphoneChoice"
+                   maxlength="20"/>
 
-                @foreach (var sm in Model.Comparison)
-                {
-                    <input type="hidden" name="comparisonIds" value="@sm.Id"/>
-                }
-
-            </div>
-            <div class="col col-md-1">
-                <button type="submit" class="btn btn-outline-primary">
-                    <i class="bi bi-plus-lg"></i>
-                </button>
-            </div>
+            @foreach (var sm in Model.Comparison)
+            {
+                <input type="hidden" name="comparisonIds" value="@sm.Id"/>
+            }
         </div>
-    </form>
-</div>
 
+        <div class="m-1">
+            <button type="submit" class="btn btn-outline-primary">
+                <i class="bi bi-plus-lg"></i>
+            </button>
+        </div>
+    </div>
+</form>
 
 <datalist id="all-smartphones">
     @foreach (var phone in Model.Smartphones)
@@ -41,14 +37,11 @@
 </datalist>
 
 <div class="tablecontainer">
-
     <table style="margin: auto">
         <thead>
-
         <th class="text-center">
             Phone
         </th>
-
         @foreach (var phone in Model.Comparison)
         {
             <th>
@@ -70,7 +63,6 @@
 
             </th>
         }
-
         </thead>
 
         <tbody>
@@ -143,7 +135,6 @@
 </div>
 
 <style>
-
 table {
 	white-space: nowrap;
 	overflow-y: scroll;
