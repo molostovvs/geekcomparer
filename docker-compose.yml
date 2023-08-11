@@ -1,0 +1,9 @@
+﻿services:
+  web:
+    image: geekweb
+    build:
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+      - "80:80"
+    restart: always
