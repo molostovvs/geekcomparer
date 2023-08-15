@@ -2,30 +2,31 @@ namespace GeekComparer.Domain;
 
 public class Smartphone : Entity
 {
-    public Release Release { get; set; }
-    public string Manufacturer { get; set; }
-    public Body Body { get; set; }
+    public string Manufacturer { get; set; } //Xiaomi or OnePlus  or Xiaomi
+    public string Brand { get; set; }        //Redmi  or OnePlus? or Xiaomi?
+    public string Model { get; set; }        //K50    or 9R       or 13
+    public DateOnly AnnounceDate { get; set; }
+    public DateOnly ReleaseDate { get; set; }
     public Battery Battery { get; set; }
     public Benchmark Benchmark { get; set; }
+    public Body Body { get; set; }
     public IReadOnlyList<Camera> Cameras { get; set; }
     public Connectivity Connectivity { get; set; }
     public Memory Memory { get; set; }
     public Screen Screen { get; set; }
-    public Sensors Sensors { get; set; }
+    public Security Security { get; set; }
+    public IReadOnlyList<Sensor> Sensors { get; set; }
     public SoC SoC { get; set; }
     public Software Software { get; set; }
     public Sound Sound { get; set; }
+    public Category Category { get; set; }
 }
 
-public enum Category
+public class Category : EnumValueObject<Category, int>
 {
-    Flagship, Mid, Economy
-}
+    public static readonly Category Flagship = new(1, nameof(Flagship));
+    public static readonly Category Mid = new(2, nameof(Mid));
+    public static readonly Category Budget = new(3, nameof(Budget));
 
-public class Release
-{
-    public DateOnly Date { get; set; }     // 05.05.2015
-    public Category Category { get; set; } // Flagship
-    public string Brand { get; set; }      // iPhone
-    public string Model { get; set; }      // Xr
+    private Category(int id, string name) : base(id, name) {}
 }

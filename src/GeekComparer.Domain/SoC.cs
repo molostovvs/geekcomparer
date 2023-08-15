@@ -1,33 +1,50 @@
 namespace GeekComparer.Domain;
 
-public class SoC : ValueObject
+public class SoC : Entity
 {
-    public string Manufacturer { get; set; }
+    public string Manufacturer { get; set; } //TODO: Implement as EnumVO?
     public string Model { get; set; }
+    public DateOnly LaunchDate { get; set; }
+    public int Litography { get; set; } //nanometeres
     public CPU CPU { get; set; }
     public GPU GPU { get; set; }
-    public int Litography { get; set; }
+}
+
+public class GPU : ValueObject
+{
+    public string Model { get; set; }
 
     protected override IEnumerable<IComparable> GetEqualityComponents()
-        => throw new NotImplementedException();
+    {
+        yield return Model;
+    }
 }
 
-public class GPU
-{
-    public string Name { get; set; }
-    public int Clock { get; set; }
-}
-
-public class CPU
+public class CPU : ValueObject
 {
     public int CoresCount { get; set; }
     public Core[] Cores { get; set; }
     public int L3Cache { get; set; }
-    public int MaxClock { get; set; }
+    public int TDP { get; set; }
+
+    protected override IEnumerable<IComparable> GetEqualityComponents()
+    {
+        yield return CoresCount;
+        foreach (var core in Cores)
+            yield return core;
+        yield return L3Cache;
+        yield return TDP;
+    }
 }
 
-public class Core
+public class Core : ValueObject
 {
-    public double Clock { get; set; }
-    public double Architecture { get; set; }
+    public DateOnly LaunchDate { get; set; }
+    public string Architecture { get; set; } //TODO: implement as EnumVO
+
+    protected override IEnumerable<IComparable> GetEqualityComponents()
+    {
+        yield return LaunchDate;
+        yield return Architecture;
+    }
 }
