@@ -6,7 +6,7 @@ public class Body : ValueObject
     public double Width { get; set; }
     public double Thickness { get; set; }
     public double Weight { get; set; }
-    public string IPRating { get; set; } // 6X or 68 or 5X
+    public string IPRating { get; set; }
     public string ScreenProtection { get; set; }
     public Material FrameMaterial { get; set; }
     public Material BackMaterial { get; set; }

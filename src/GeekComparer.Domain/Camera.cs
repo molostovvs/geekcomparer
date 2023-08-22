@@ -13,12 +13,25 @@ public class Camera : ValueObject
     public bool HasOpticalZoom { get; set; }
     public int OpticalZoomValue { get; set; } // 5x or 10x
     public int DigitalZoomValue { get; set; }
-
-    public Photo Photo { get; set; }
-    public Video Video { get; set; }
+    public PhotoCapabilities PhotoCapabilities { get; set; }
+    public VideoCapabilities VideoCapabilities { get; set; }
 
     protected override IEnumerable<IComparable> GetEqualityComponents()
-        => throw new NotImplementedException();
+    {
+        yield return LensType;
+        yield return Matrix;
+        yield return Aperture;
+        yield return FocalLength;
+        yield return PixelSize;
+        yield return Sensor;
+        yield return Autofocus;
+        yield return Stabilization;
+        yield return HasOpticalZoom;
+        yield return OpticalZoomValue;
+        yield return DigitalZoomValue;
+        yield return PhotoCapabilities;
+        yield return VideoCapabilities;
+    }
 }
 
 public class LensType : EnumValueObject<LensType, int>
@@ -32,15 +45,15 @@ public class LensType : EnumValueObject<LensType, int>
     private LensType(int id, string name) : base(id, name) {}
 }
 
-public class Video : ValueObject
+public class VideoCapabilities : ValueObject
 {
-    public IReadOnlyList<Mode> Modes { get; set; }
+    public IReadOnlyList<VideoMode> Modes { get; set; }
 
     protected override IEnumerable<IComparable> GetEqualityComponents()
         => Modes;
 }
 
-public class Mode : ValueObject
+public class VideoMode : ValueObject
 {
     public string Resolution { get; set; }
     public int FrameRate { get; set; }
@@ -52,7 +65,7 @@ public class Mode : ValueObject
     }
 }
 
-public class Photo : ValueObject
+public class PhotoCapabilities : ValueObject
 {
     public int MaxWidth { get; set; }
     public int MaxHeight { get; set; }
@@ -83,9 +96,16 @@ public class Autofocus : EnumValueObject<Autofocus, int>
     private Autofocus(int id, string name) : base(id, name) {}
 }
 
-public class ImageSensor
+public class ImageSensor : ValueObject
 {
     public string Format { get; set; }       // 1/2.51"
     public string Manufacturer { get; set; } // SONY
     public string Model { get; set; }        //IMX858
+
+    protected override IEnumerable<IComparable> GetEqualityComponents()
+    {
+        yield return Format;
+        yield return Manufacturer;
+        yield return Model;
+    }
 }

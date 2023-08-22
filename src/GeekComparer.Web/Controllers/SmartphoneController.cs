@@ -5,17 +5,71 @@ namespace GeekComparer.Web.Controllers;
 
 public class SmartphoneController : Controller
 {
-    private List<Smartphone> _smartphones = new List<Smartphone>
+    private List<Smartphone> _smartphones = new()
     {
-        new() { Id = 1, Brand = "Apple", Model = "iPhone Xr", ReleaseDate = "May 2019" },
-        new() { Id = 2, Brand = "Realme", Model = "GT Neo 5 SE", ReleaseDate = "May 2023" },
-        new() { Id = 3, Brand = "OnePlus", Model = "Nord 2", ReleaseDate = "January 2022" },
-        new() { Id = 4, Brand = "Xiaomi", Model = "5S", ReleaseDate = "February 2022" },
-        new() { Id = 5, Brand = "Oppo", Model = "Reno 8", ReleaseDate = "March 2022" },
-        new() { Id = 6, Brand = "Google", Model = "Pixel 6a", ReleaseDate = "April 2022" },
-        new() { Id = 7, Brand = "Samsung", Model = "A54", ReleaseDate = "May 2022" },
-        new() { Id = 8, Brand = "Nothing", Model = "Phone 2", ReleaseDate = "June 2022" },
-        new() { Id = 9, Brand = "Asus", Model = "ZenPhone 8", ReleaseDate = "July 2022" },
+        new()
+        {
+            Id = 1,
+            Brand = "Apple",
+            Model = "iPhone Xr",
+            ReleaseDate = "May 2019",
+        },
+        new()
+        {
+            Id = 2,
+            Brand = "Realme",
+            Model = "GT Neo 5 SE",
+            ReleaseDate = "May 2023",
+        },
+        new()
+        {
+            Id = 3,
+            Brand = "OnePlus",
+            Model = "Nord 2",
+            ReleaseDate = "January 2022",
+        },
+        new()
+        {
+            Id = 4,
+            Brand = "Xiaomi",
+            Model = "5S",
+            ReleaseDate = "February 2022",
+        },
+        new()
+        {
+            Id = 5,
+            Brand = "Oppo",
+            Model = "Reno 8",
+            ReleaseDate = "March 2022",
+        },
+        new()
+        {
+            Id = 6,
+            Brand = "Google",
+            Model = "Pixel 6a",
+            ReleaseDate = "April 2022",
+        },
+        new()
+        {
+            Id = 7,
+            Brand = "Samsung",
+            Model = "A54",
+            ReleaseDate = "May 2022",
+        },
+        new()
+        {
+            Id = 8,
+            Brand = "Nothing",
+            Model = "Phone 2",
+            ReleaseDate = "June 2022",
+        },
+        new()
+        {
+            Id = 9,
+            Brand = "Asus",
+            Model = "ZenPhone 8",
+            ReleaseDate = "July 2022",
+        },
     };
 
     [HttpGet("/Smartphone/{comparisonIds}")]
@@ -47,7 +101,14 @@ public class SmartphoneController : Controller
         var ids = string.Join('_', comparisonIds);
         ids += $"_{idToAdd}";
 
-        return RedirectToAction("Index", "Smartphone", new { comparisonIds = ids });
+        return RedirectToAction(
+            "Index",
+            "Smartphone",
+            new
+            {
+                comparisonIds = ids,
+            }
+        );
     }
 
     [HttpPost]
@@ -55,6 +116,13 @@ public class SmartphoneController : Controller
     {
         var ids = string.Join('_', comparisonIds.Where(id => id != idToDelete));
 
-        return RedirectToAction("Index", "Smartphone", new { comparisonIds = ids });
+        return RedirectToAction(
+            "Index",
+            "Smartphone",
+            new
+            {
+                comparisonIds = ids,
+            }
+        );
     }
 }

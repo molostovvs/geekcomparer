@@ -2,14 +2,14 @@ namespace GeekComparer.Domain;
 
 public class Sound : ValueObject
 {
-    public Speakers Speakers { get; set; }
+    public SpeakerType SpeakerType { get; set; }
     public bool HasHeadphoneJack { get; set; }
     public bool HasFmRadio { get; set; }
     public IReadOnlyList<Codec> Codecs { get; set; }
 
     protected override IEnumerable<IComparable> GetEqualityComponents()
     {
-        yield return Speakers;
+        yield return SpeakerType;
         yield return HasHeadphoneJack;
         yield return HasFmRadio;
         foreach (var codec in Codecs)
@@ -17,12 +17,12 @@ public class Sound : ValueObject
     }
 }
 
-public class Speakers : EnumValueObject<Speakers, int>
+public class SpeakerType : EnumValueObject<SpeakerType, int>
 {
-    public static readonly Speakers Mono = new Speakers(1, nameof(Mono));
-    public static readonly Speakers Stereo = new Speakers(2, nameof(Stereo));
+    public static readonly SpeakerType Mono = new(1, nameof(Mono));
+    public static readonly SpeakerType Stereo = new(2, nameof(Stereo));
 
-    private Speakers(int id, string name) : base(id, name) {}
+    private SpeakerType(int id, string name) : base(id, name) {}
 }
 
 public class Codec : EnumValueObject<Codec, int>
