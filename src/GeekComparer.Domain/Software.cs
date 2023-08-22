@@ -1,19 +1,39 @@
 namespace GeekComparer.Domain;
 
-public class Software
+public class Software : ValueObject
 {
+    public Distribution Distribution;
     public OperatingSystem OperatingSystem { get; set; }
+    public int DistributionVersion { get; set; }
     public int OperatingSystemVersion { get; set; }
-    public UI UI;
-    public int UIVersion { get; set; }
+
+    protected override IEnumerable<IComparable> GetEqualityComponents()
+    {
+        yield return Distribution;
+        yield return OperatingSystem;
+        yield return DistributionVersion;
+        yield return OperatingSystemVersion;
+    }
 }
 
-public enum UI
+public class Distribution : EnumValueObject<Distribution, int>
 {
-    MIUI, FunTouch, AOSP,
+    public static readonly Distribution MIUI = new(1, nameof(MIUI));
+    public static readonly Distribution FunTouch = new(2, nameof(FunTouch));
+    public static readonly Distribution EMUI = new(3, nameof(EMUI));
+    public static readonly Distribution FireOS = new(4, nameof(FireOS));
+
+    private Distribution(int id, string name) : base(id, name) {}
 }
 
-public enum OperatingSystem
+public class OperatingSystem : EnumValueObject<OperatingSystem, int>
 {
-    Android, IOS, Linux,
+    public static readonly OperatingSystem Android = new(1, nameof(Android));
+    public static readonly OperatingSystem iOS = new(2, nameof(iOS));
+    public static readonly OperatingSystem Linux = new(3, nameof(Linux));
+    public static readonly OperatingSystem WindowsPhone = new(4, nameof(WindowsPhone));
+    public static readonly OperatingSystem HarmonyOS = new(5, nameof(HarmonyOS));
+    public static readonly OperatingSystem Symbian = new(6, nameof(Symbian));
+
+    private OperatingSystem(int id, string name) : base(id, name) {}
 }
