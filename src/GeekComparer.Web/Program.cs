@@ -5,6 +5,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
 builder.Services.AddDbContext<ApplicationDbContext>(
     opt => opt.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
 );
@@ -30,5 +31,11 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Smartphone}/{action=Index}/{comparisonIds=1_2}"
 );
+
+using var context = app.Services.CreateScope()
+   .ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+context.Seed();
+context.SaveChanges();
 
 app.Run();
