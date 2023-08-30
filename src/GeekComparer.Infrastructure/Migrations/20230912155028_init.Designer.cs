@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace GeekComparer.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230830112230_init")]
+    [Migration("20230912155028_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -24,6 +24,21 @@ namespace GeekComparer.Infrastructure.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("CameraSmartphone", b =>
+                {
+                    b.Property<Guid>("CamerasId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("SmartphoneId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("CamerasId", "SmartphoneId");
+
+                    b.HasIndex("SmartphoneId");
+
+                    b.ToTable("CameraSmartphone");
+                });
 
             modelBuilder.Entity("CellularFiveGBand", b =>
                 {
@@ -379,15 +394,6 @@ namespace GeekComparer.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<int>("CoresCount")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("L3Cache")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("MaxClock")
-                        .HasColumnType("integer");
-
                     b.Property<int>("TDP")
                         .HasColumnType("integer");
 
@@ -435,9 +441,6 @@ namespace GeekComparer.Infrastructure.Migrations
                     b.Property<Guid>("SensorId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid?>("SmartphoneId")
-                        .HasColumnType("uuid");
-
                     b.Property<int>("StabilizationId")
                         .HasColumnType("integer");
 
@@ -453,8 +456,6 @@ namespace GeekComparer.Infrastructure.Migrations
                     b.HasIndex("PhotoCapabilitiesId");
 
                     b.HasIndex("SensorId");
-
-                    b.HasIndex("SmartphoneId");
 
                     b.HasIndex("StabilizationId");
 
@@ -616,7 +617,7 @@ namespace GeekComparer.Infrastructure.Migrations
                     b.Property<bool>("HasUWB")
                         .HasColumnType("boolean");
 
-                    b.Property<Guid>("UsbId")
+                    b.Property<Guid>("USBId")
                         .HasColumnType("uuid");
 
                     b.Property<Guid>("WiFiId")
@@ -628,7 +629,7 @@ namespace GeekComparer.Infrastructure.Migrations
 
                     b.HasIndex("CellularId");
 
-                    b.HasIndex("UsbId");
+                    b.HasIndex("USBId");
 
                     b.HasIndex("WiFiId");
 
@@ -641,15 +642,22 @@ namespace GeekComparer.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<string>("Architecture")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<Guid?>("CPUId")
                         .HasColumnType("uuid");
 
+                    b.Property<int>("Clock")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("InstructionSet")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<DateOnly>("LaunchDate")
                         .HasColumnType("date");
+
+                    b.Property<string>("Microarchitecture")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -1586,7 +1594,7 @@ namespace GeekComparer.Infrastructure.Migrations
                     b.Property<bool>("MemoryCardSupported")
                         .HasColumnType("boolean");
 
-                    b.Property<Guid>("RamId")
+                    b.Property<Guid>("RAMId")
                         .HasColumnType("uuid");
 
                     b.Property<Guid>("StorageId")
@@ -1594,7 +1602,7 @@ namespace GeekComparer.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("RamId");
+                    b.HasIndex("RAMId");
 
                     b.HasIndex("StorageId");
 
@@ -1750,6 +1758,11 @@ namespace GeekComparer.Infrastructure.Migrations
                         {
                             Id = 2,
                             Name = "OLED"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "EInk"
                         });
                 });
 
@@ -1770,7 +1783,7 @@ namespace GeekComparer.Infrastructure.Migrations
                     b.ToTable("PhotoCapabilities");
                 });
 
-            modelBuilder.Entity("GeekComparer.Domain.Ram", b =>
+            modelBuilder.Entity("GeekComparer.Domain.RAM", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -1981,11 +1994,6 @@ namespace GeekComparer.Infrastructure.Migrations
                         new
                         {
                             Id = 7,
-                            Name = "GPS"
-                        },
-                        new
-                        {
-                            Id = 8,
                             Name = "LIDAR"
                         });
                 });
@@ -2106,13 +2114,19 @@ namespace GeekComparer.Infrastructure.Migrations
 
                     b.HasIndex("BodyId");
 
+                    b.HasIndex("Brand");
+
                     b.HasIndex("CategoryId");
 
                     b.HasIndex("ChargingId");
 
                     b.HasIndex("ConnectivityId");
 
+                    b.HasIndex("Manufacturer");
+
                     b.HasIndex("MemoryId");
+
+                    b.HasIndex("Model");
 
                     b.HasIndex("ScreenId");
 
@@ -2567,7 +2581,7 @@ namespace GeekComparer.Infrastructure.Migrations
                         });
                 });
 
-            modelBuilder.Entity("GeekComparer.Domain.Usb", b =>
+            modelBuilder.Entity("GeekComparer.Domain.USB", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -2766,19 +2780,19 @@ namespace GeekComparer.Infrastructure.Migrations
                     b.ToTable("SensorSmartphone");
                 });
 
-            modelBuilder.Entity("UsbUsbFeature", b =>
+            modelBuilder.Entity("USBUsbFeature", b =>
                 {
                     b.Property<int>("FeaturesId")
                         .HasColumnType("integer");
 
-                    b.Property<Guid>("UsbId")
+                    b.Property<Guid>("USBId")
                         .HasColumnType("uuid");
 
-                    b.HasKey("FeaturesId", "UsbId");
+                    b.HasKey("FeaturesId", "USBId");
 
-                    b.HasIndex("UsbId");
+                    b.HasIndex("USBId");
 
-                    b.ToTable("UsbUsbFeature");
+                    b.ToTable("USBUsbFeature");
                 });
 
             modelBuilder.Entity("WiFiWiFiStandard", b =>
@@ -2794,6 +2808,21 @@ namespace GeekComparer.Infrastructure.Migrations
                     b.HasIndex("WiFiId");
 
                     b.ToTable("WiFiWiFiStandard");
+                });
+
+            modelBuilder.Entity("CameraSmartphone", b =>
+                {
+                    b.HasOne("GeekComparer.Domain.Camera", null)
+                        .WithMany()
+                        .HasForeignKey("CamerasId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("GeekComparer.Domain.Smartphone", null)
+                        .WithMany()
+                        .HasForeignKey("SmartphoneId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("CellularFiveGBand", b =>
@@ -3008,10 +3037,6 @@ namespace GeekComparer.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("GeekComparer.Domain.Smartphone", null)
-                        .WithMany("Cameras")
-                        .HasForeignKey("SmartphoneId");
-
                     b.HasOne("GeekComparer.Domain.Stabilization", "Stabilization")
                         .WithMany()
                         .HasForeignKey("StabilizationId")
@@ -3062,9 +3087,9 @@ namespace GeekComparer.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("GeekComparer.Domain.Usb", "Usb")
+                    b.HasOne("GeekComparer.Domain.USB", "USB")
                         .WithMany()
-                        .HasForeignKey("UsbId")
+                        .HasForeignKey("USBId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -3078,7 +3103,7 @@ namespace GeekComparer.Infrastructure.Migrations
 
                     b.Navigation("Cellular");
 
-                    b.Navigation("Usb");
+                    b.Navigation("USB");
 
                     b.Navigation("WiFi");
                 });
@@ -3092,9 +3117,9 @@ namespace GeekComparer.Infrastructure.Migrations
 
             modelBuilder.Entity("GeekComparer.Domain.Memory", b =>
                 {
-                    b.HasOne("GeekComparer.Domain.Ram", "Ram")
+                    b.HasOne("GeekComparer.Domain.RAM", "RAM")
                         .WithMany()
-                        .HasForeignKey("RamId")
+                        .HasForeignKey("RAMId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -3104,12 +3129,12 @@ namespace GeekComparer.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Ram");
+                    b.Navigation("RAM");
 
                     b.Navigation("Storage");
                 });
 
-            modelBuilder.Entity("GeekComparer.Domain.Ram", b =>
+            modelBuilder.Entity("GeekComparer.Domain.RAM", b =>
                 {
                     b.HasOne("GeekComparer.Domain.RamType", "Type")
                         .WithMany()
@@ -3290,7 +3315,7 @@ namespace GeekComparer.Infrastructure.Migrations
                     b.Navigation("Type");
                 });
 
-            modelBuilder.Entity("GeekComparer.Domain.Usb", b =>
+            modelBuilder.Entity("GeekComparer.Domain.USB", b =>
                 {
                     b.HasOne("GeekComparer.Domain.UsbConnector", "Connector")
                         .WithMany()
@@ -3323,7 +3348,7 @@ namespace GeekComparer.Infrastructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("UsbUsbFeature", b =>
+            modelBuilder.Entity("USBUsbFeature", b =>
                 {
                     b.HasOne("GeekComparer.Domain.UsbFeature", null)
                         .WithMany()
@@ -3331,9 +3356,9 @@ namespace GeekComparer.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("GeekComparer.Domain.Usb", null)
+                    b.HasOne("GeekComparer.Domain.USB", null)
                         .WithMany()
-                        .HasForeignKey("UsbId")
+                        .HasForeignKey("USBId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -3356,11 +3381,6 @@ namespace GeekComparer.Infrastructure.Migrations
             modelBuilder.Entity("GeekComparer.Domain.CPU", b =>
                 {
                     b.Navigation("Cores");
-                });
-
-            modelBuilder.Entity("GeekComparer.Domain.Smartphone", b =>
-                {
-                    b.Navigation("Cameras");
                 });
 
             modelBuilder.Entity("GeekComparer.Domain.VideoCapabilities", b =>

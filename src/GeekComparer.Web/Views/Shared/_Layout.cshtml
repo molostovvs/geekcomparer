@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="height: 100%">
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -9,10 +9,9 @@
     <link rel="stylesheet" href="~/Web.styles.css" asp-append-version="true"/>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 </head>
-<body>
+<body style="height: 100%;">
 
 @*<header>
-
     <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-0">
         <div class="container-fluid">
             <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">GeekComparer.Web</a>
@@ -37,8 +36,8 @@
     </nav>
 </header>*@
 
-<div class="container py-0">
-    <main role="main" class="@*px-2 py-0*@">
+<div class="container py-0 " style="max-width: 95%">
+    <main role="main">
         @RenderBody()
     </main>
 </div>

@@ -132,10 +132,7 @@ namespace GeekComparer.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    CoresCount = table.Column<int>(type: "integer", nullable: false),
-                    MaxClock = table.Column<int>(type: "integer", nullable: false),
-                    TDP = table.Column<int>(type: "integer", nullable: false),
-                    L3Cache = table.Column<int>(type: "integer", nullable: false)
+                    TDP = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -581,8 +578,10 @@ namespace GeekComparer.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Clock = table.Column<int>(type: "integer", nullable: false),
+                    InstructionSet = table.Column<string>(type: "text", nullable: false),
+                    Microarchitecture = table.Column<string>(type: "text", nullable: false),
                     LaunchDate = table.Column<DateOnly>(type: "date", nullable: false),
-                    Architecture = table.Column<string>(type: "text", nullable: false),
                     CPUId = table.Column<Guid>(type: "uuid", nullable: true)
                 },
                 constraints: table =>
@@ -857,6 +856,66 @@ namespace GeekComparer.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Cameras",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    LensTypeId = table.Column<int>(type: "integer", nullable: false),
+                    Matrix = table.Column<double>(type: "double precision", nullable: false),
+                    Aperture = table.Column<double>(type: "double precision", nullable: false),
+                    FocalLength = table.Column<int>(type: "integer", nullable: false),
+                    PixelSize = table.Column<double>(type: "double precision", nullable: false),
+                    SensorId = table.Column<Guid>(type: "uuid", nullable: false),
+                    AutofocusId = table.Column<int>(type: "integer", nullable: false),
+                    StabilizationId = table.Column<int>(type: "integer", nullable: false),
+                    HasOpticalZoom = table.Column<bool>(type: "boolean", nullable: false),
+                    OpticalZoomValue = table.Column<int>(type: "integer", nullable: false),
+                    DigitalZoomValue = table.Column<int>(type: "integer", nullable: false),
+                    PhotoCapabilitiesId = table.Column<Guid>(type: "uuid", nullable: false),
+                    VideoCapabilitiesId = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Cameras", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Cameras_Autofocuses_AutofocusId",
+                        column: x => x.AutofocusId,
+                        principalTable: "Autofocuses",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Cameras_ImageSensors_SensorId",
+                        column: x => x.SensorId,
+                        principalTable: "ImageSensors",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Cameras_LensTypes_LensTypeId",
+                        column: x => x.LensTypeId,
+                        principalTable: "LensTypes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Cameras_PhotoCapabilities_PhotoCapabilitiesId",
+                        column: x => x.PhotoCapabilitiesId,
+                        principalTable: "PhotoCapabilities",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Cameras_Stabilizations_StabilizationId",
+                        column: x => x.StabilizationId,
+                        principalTable: "Stabilizations",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Cameras_VideoCapabilities_VideoCapabilitiesId",
+                        column: x => x.VideoCapabilitiesId,
+                        principalTable: "VideoCapabilities",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "VideoModes",
                 columns: table => new
                 {
@@ -1048,7 +1107,7 @@ namespace GeekComparer.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    RamId = table.Column<Guid>(type: "uuid", nullable: false),
+                    RAMId = table.Column<Guid>(type: "uuid", nullable: false),
                     StorageId = table.Column<Guid>(type: "uuid", nullable: false),
                     MemoryCardSupported = table.Column<bool>(type: "boolean", nullable: false)
                 },
@@ -1056,8 +1115,8 @@ namespace GeekComparer.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_Memories", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Memories_Rams_RamId",
-                        column: x => x.RamId,
+                        name: "FK_Memories_Rams_RAMId",
+                        column: x => x.RAMId,
                         principalTable: "Rams",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -1077,7 +1136,7 @@ namespace GeekComparer.Infrastructure.Migrations
                     CellularId = table.Column<Guid>(type: "uuid", nullable: false),
                     WiFiId = table.Column<Guid>(type: "uuid", nullable: false),
                     BluetoothId = table.Column<Guid>(type: "uuid", nullable: false),
-                    UsbId = table.Column<Guid>(type: "uuid", nullable: false),
+                    USBId = table.Column<Guid>(type: "uuid", nullable: false),
                     HasNFC = table.Column<bool>(type: "boolean", nullable: false),
                     HasIR = table.Column<bool>(type: "boolean", nullable: false),
                     HasUWB = table.Column<bool>(type: "boolean", nullable: false)
@@ -1098,8 +1157,8 @@ namespace GeekComparer.Infrastructure.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Connectivities_Usbs_UsbId",
-                        column: x => x.UsbId,
+                        name: "FK_Connectivities_Usbs_USBId",
+                        column: x => x.USBId,
                         principalTable: "Usbs",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -1112,24 +1171,24 @@ namespace GeekComparer.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "UsbUsbFeature",
+                name: "USBUsbFeature",
                 columns: table => new
                 {
                     FeaturesId = table.Column<int>(type: "integer", nullable: false),
-                    UsbId = table.Column<Guid>(type: "uuid", nullable: false)
+                    USBId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UsbUsbFeature", x => new { x.FeaturesId, x.UsbId });
+                    table.PrimaryKey("PK_USBUsbFeature", x => new { x.FeaturesId, x.USBId });
                     table.ForeignKey(
-                        name: "FK_UsbUsbFeature_UsbFeatures_FeaturesId",
+                        name: "FK_USBUsbFeature_UsbFeatures_FeaturesId",
                         column: x => x.FeaturesId,
                         principalTable: "UsbFeatures",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_UsbUsbFeature_Usbs_UsbId",
-                        column: x => x.UsbId,
+                        name: "FK_USBUsbFeature_Usbs_USBId",
+                        column: x => x.USBId,
                         principalTable: "Usbs",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -1260,67 +1319,25 @@ namespace GeekComparer.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Cameras",
+                name: "CameraSmartphone",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    LensTypeId = table.Column<int>(type: "integer", nullable: false),
-                    Matrix = table.Column<double>(type: "double precision", nullable: false),
-                    Aperture = table.Column<double>(type: "double precision", nullable: false),
-                    FocalLength = table.Column<int>(type: "integer", nullable: false),
-                    PixelSize = table.Column<double>(type: "double precision", nullable: false),
-                    SensorId = table.Column<Guid>(type: "uuid", nullable: false),
-                    AutofocusId = table.Column<int>(type: "integer", nullable: false),
-                    StabilizationId = table.Column<int>(type: "integer", nullable: false),
-                    HasOpticalZoom = table.Column<bool>(type: "boolean", nullable: false),
-                    OpticalZoomValue = table.Column<int>(type: "integer", nullable: false),
-                    DigitalZoomValue = table.Column<int>(type: "integer", nullable: false),
-                    PhotoCapabilitiesId = table.Column<Guid>(type: "uuid", nullable: false),
-                    VideoCapabilitiesId = table.Column<Guid>(type: "uuid", nullable: false),
-                    SmartphoneId = table.Column<Guid>(type: "uuid", nullable: true)
+                    CamerasId = table.Column<Guid>(type: "uuid", nullable: false),
+                    SmartphoneId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Cameras", x => x.Id);
+                    table.PrimaryKey("PK_CameraSmartphone", x => new { x.CamerasId, x.SmartphoneId });
                     table.ForeignKey(
-                        name: "FK_Cameras_Autofocuses_AutofocusId",
-                        column: x => x.AutofocusId,
-                        principalTable: "Autofocuses",
+                        name: "FK_CameraSmartphone_Cameras_CamerasId",
+                        column: x => x.CamerasId,
+                        principalTable: "Cameras",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Cameras_ImageSensors_SensorId",
-                        column: x => x.SensorId,
-                        principalTable: "ImageSensors",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Cameras_LensTypes_LensTypeId",
-                        column: x => x.LensTypeId,
-                        principalTable: "LensTypes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Cameras_PhotoCapabilities_PhotoCapabilitiesId",
-                        column: x => x.PhotoCapabilitiesId,
-                        principalTable: "PhotoCapabilities",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Cameras_Smartphones_SmartphoneId",
+                        name: "FK_CameraSmartphone_Smartphones_SmartphoneId",
                         column: x => x.SmartphoneId,
                         principalTable: "Smartphones",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Cameras_Stabilizations_StabilizationId",
-                        column: x => x.StabilizationId,
-                        principalTable: "Stabilizations",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Cameras_VideoCapabilities_VideoCapabilitiesId",
-                        column: x => x.VideoCapabilitiesId,
-                        principalTable: "VideoCapabilities",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -1623,7 +1640,8 @@ namespace GeekComparer.Infrastructure.Migrations
                 values: new object[,]
                 {
                     { 1, "IPS" },
-                    { 2, "OLED" }
+                    { 2, "OLED" },
+                    { 3, "EInk" }
                 });
 
             migrationBuilder.InsertData(
@@ -1653,8 +1671,7 @@ namespace GeekComparer.Infrastructure.Migrations
                     { 4, "Accelerometer" },
                     { 5, "Photo" },
                     { 6, "Magnetometer" },
-                    { 7, "GPS" },
-                    { 8, "LIDAR" }
+                    { 7, "LIDAR" }
                 });
 
             migrationBuilder.InsertData(
@@ -1852,11 +1869,6 @@ namespace GeekComparer.Infrastructure.Migrations
                 column: "SensorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Cameras_SmartphoneId",
-                table: "Cameras",
-                column: "SmartphoneId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Cameras_StabilizationId",
                 table: "Cameras",
                 column: "StabilizationId");
@@ -1865,6 +1877,11 @@ namespace GeekComparer.Infrastructure.Migrations
                 name: "IX_Cameras_VideoCapabilitiesId",
                 table: "Cameras",
                 column: "VideoCapabilitiesId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CameraSmartphone_SmartphoneId",
+                table: "CameraSmartphone",
+                column: "SmartphoneId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CellularFiveGBand_CellularId",
@@ -1912,9 +1929,9 @@ namespace GeekComparer.Infrastructure.Migrations
                 column: "CellularId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Connectivities_UsbId",
+                name: "IX_Connectivities_USBId",
                 table: "Connectivities",
-                column: "UsbId");
+                column: "USBId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Connectivities_WiFiId",
@@ -1932,9 +1949,9 @@ namespace GeekComparer.Infrastructure.Migrations
                 column: "CPUId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Memories_RamId",
+                name: "IX_Memories_RAMId",
                 table: "Memories",
-                column: "RamId");
+                column: "RAMId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Memories_StorageId",
@@ -1977,6 +1994,11 @@ namespace GeekComparer.Infrastructure.Migrations
                 column: "BodyId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Smartphones_Brand",
+                table: "Smartphones",
+                column: "Brand");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Smartphones_CategoryId",
                 table: "Smartphones",
                 column: "CategoryId");
@@ -1992,9 +2014,19 @@ namespace GeekComparer.Infrastructure.Migrations
                 column: "ConnectivityId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Smartphones_Manufacturer",
+                table: "Smartphones",
+                column: "Manufacturer");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Smartphones_MemoryId",
                 table: "Smartphones",
                 column: "MemoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Smartphones_Model",
+                table: "Smartphones",
+                column: "Model");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Smartphones_ScreenId",
@@ -2052,9 +2084,9 @@ namespace GeekComparer.Infrastructure.Migrations
                 column: "ConnectorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UsbUsbFeature_UsbId",
-                table: "UsbUsbFeature",
-                column: "UsbId");
+                name: "IX_USBUsbFeature_USBId",
+                table: "USBUsbFeature",
+                column: "USBId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_VideoModes_VideoCapabilitiesId",
@@ -2071,7 +2103,7 @@ namespace GeekComparer.Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Cameras");
+                name: "CameraSmartphone");
 
             migrationBuilder.DropTable(
                 name: "CellularFiveGBand");
@@ -2104,7 +2136,7 @@ namespace GeekComparer.Infrastructure.Migrations
                 name: "SensorSmartphone");
 
             migrationBuilder.DropTable(
-                name: "UsbUsbFeature");
+                name: "USBUsbFeature");
 
             migrationBuilder.DropTable(
                 name: "VideoModes");
@@ -2113,19 +2145,7 @@ namespace GeekComparer.Infrastructure.Migrations
                 name: "WiFiWiFiStandard");
 
             migrationBuilder.DropTable(
-                name: "Autofocuses");
-
-            migrationBuilder.DropTable(
-                name: "ImageSensors");
-
-            migrationBuilder.DropTable(
-                name: "LensTypes");
-
-            migrationBuilder.DropTable(
-                name: "PhotoCapabilities");
-
-            migrationBuilder.DropTable(
-                name: "Stabilizations");
+                name: "Cameras");
 
             migrationBuilder.DropTable(
                 name: "FiveGBands");
@@ -2158,10 +2178,25 @@ namespace GeekComparer.Infrastructure.Migrations
                 name: "UsbFeatures");
 
             migrationBuilder.DropTable(
-                name: "VideoCapabilities");
+                name: "WiFiStandards");
 
             migrationBuilder.DropTable(
-                name: "WiFiStandards");
+                name: "Autofocuses");
+
+            migrationBuilder.DropTable(
+                name: "ImageSensors");
+
+            migrationBuilder.DropTable(
+                name: "LensTypes");
+
+            migrationBuilder.DropTable(
+                name: "PhotoCapabilities");
+
+            migrationBuilder.DropTable(
+                name: "Stabilizations");
+
+            migrationBuilder.DropTable(
+                name: "VideoCapabilities");
 
             migrationBuilder.DropTable(
                 name: "Batteries");

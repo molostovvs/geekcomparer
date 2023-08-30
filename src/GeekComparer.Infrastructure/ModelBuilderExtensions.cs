@@ -59,5 +59,35 @@ public static class ModelBuilderExtensions
         modelBuilder.Entity<WiFi>().HasMany(w => w.Standards).WithMany();
         modelBuilder.Entity<Smartphone>().HasMany(s => s.Sensors).WithMany();
         modelBuilder.Entity<Sound>().HasMany(s => s.Codecs).WithMany();
+        modelBuilder.Entity<Smartphone>().HasMany(s => s.Cameras).WithMany();
+    }
+
+    public static void ConfigureAutoIncludes(this ModelBuilder modelBuilder)
+        => RecursiveAutoInclude(typeof(Smartphone), modelBuilder);
+
+    private static void RecursiveAutoInclude(Type type, ModelBuilder modelBuilder)
+    {
+        var props = type
+           .GetProperties(BindingFlags.Instance | BindingFlags.Public)
+           .Where(
+                p =>
+                    p.PropertyType != typeof(string)
+                    && (p.PropertyType.IsClass
+                        || p.PropertyType.GetInterfaces().Contains(typeof(IEnumerable)))
+            )
+           .ToList();
+
+        foreach (var prop in props)
+        {
+            modelBuilder.Entity(type).Navigation(prop.Name).AutoInclude();
+
+            if (prop.PropertyType.GetInterfaces().Contains(typeof(IEnumerable)))
+                RecursiveAutoInclude(
+                    prop.PropertyType.GetGenericArguments().First(),
+                    modelBuilder
+                );
+            else
+                RecursiveAutoInclude(prop.PropertyType, modelBuilder);
+        }
     }
 }

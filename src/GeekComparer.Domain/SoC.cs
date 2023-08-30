@@ -34,31 +34,29 @@ public class GPU : ValueObject
 
 public class CPU : ValueObject
 {
-    public int CoresCount { get; set; }
     public IReadOnlyList<Core> Cores { get; set; }
-    public int MaxClock { get; set; }
     public int TDP { get; set; }
-    public int L3Cache { get; set; }
 
     protected override IEnumerable<IComparable> GetEqualityComponents()
     {
-        yield return CoresCount;
         foreach (var core in Cores)
             yield return core;
-        yield return MaxClock;
         yield return TDP;
-        yield return L3Cache;
     }
 }
 
 public class Core : ValueObject
 {
+    public int Clock { get; set; }
+    public string InstructionSet { get; set; }    //TODO: implement as EnumVO?
+    public string Microarchitecture { get; set; } //TODO: implement as EnumVO?
     public DateOnly LaunchDate { get; set; }
-    public string Architecture { get; set; } //TODO: implement as EnumVO
 
     protected override IEnumerable<IComparable> GetEqualityComponents()
     {
+        yield return Clock;
+        yield return InstructionSet;
+        yield return Microarchitecture;
         yield return LaunchDate;
-        yield return Architecture;
     }
 }
