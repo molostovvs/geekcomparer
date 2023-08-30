@@ -9,8 +9,8 @@ public sealed class ApplicationDbContext : DbContext
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
 #pragma warning restore CS8618
     {
-        Database.EnsureDeleted();
-        Database.Migrate();
+        // Database.EnsureDeleted();
+        // Database.Migrate();
     }
 
     public DbSet<Benchmark> Benchmarks { get; set; }
@@ -76,6 +76,11 @@ public sealed class ApplicationDbContext : DbContext
         modelBuilder.SeedEnums();
         modelBuilder.AddIdsToValueObjects();
         modelBuilder.ConfigureManyToMany();
+        modelBuilder.ConfigureAutoIncludes();
+
+        modelBuilder.Entity<Smartphone>().HasIndex(s => s.Manufacturer);
+        modelBuilder.Entity<Smartphone>().HasIndex(s => s.Brand);
+        modelBuilder.Entity<Smartphone>().HasIndex(s => s.Model);
     }
 
     protected override void ConfigureConventions(ModelConfigurationBuilder configBuilder)
@@ -86,24 +91,59 @@ public sealed class ApplicationDbContext : DbContext
 
     public void Seed()
     {
-        var core = new Core
+        var fastCore = new Core
         {
-            Architecture = "ArmV9",
+            Clock = 3000,
+            InstructionSet = "ARMv8.2-a",
+            Microarchitecture = "Cortex-A78",
             LaunchDate = new DateOnly(2021, 9, 1),
         };
 
+        var midCore = new Core
+        {
+            Clock = 2600,
+            InstructionSet = "ARMv8.2-A",
+            Microarchitecture = "Cortex-A78",
+            LaunchDate = new DateOnly(2021, 9, 1),
+        };
+
+        var slowCore = new Core
+        {
+            Clock = 2000,
+            InstructionSet = "ARMv8.2-A",
+            Microarchitecture = "Cortex-A55",
+            LaunchDate = new DateOnly(2021, 9, 1),
+        };
+
+        var cores = new List<Core>();
+        cores.Add(fastCore);
+        for (int i = 0; i < 3; i++)
+        {
+            var mid = new Core()
+            {
+                Clock = midCore.Clock,
+                InstructionSet = midCore.InstructionSet,
+                LaunchDate = midCore.LaunchDate,
+                Microarchitecture = midCore.Microarchitecture,
+            };
+            cores.Add(mid);
+        }
+
+        for (int i = 0; i < 4; i++)
+        {
+            var slow = new Core()
+            {
+                Clock = slowCore.Clock,
+                InstructionSet = slowCore.InstructionSet,
+                LaunchDate = slowCore.LaunchDate,
+                Microarchitecture = slowCore.Microarchitecture,
+            };
+            cores.Add(slow);
+        }
+
         var cpu = new CPU
         {
-            Cores = new List<Core>()
-            {
-                core,
-                core,
-                core,
-                core,
-            },
-            CoresCount = 12,
-            MaxClock = 900,
-            L3Cache = 8,
+            Cores = cores,
             TDP = 5,
         };
 
@@ -118,8 +158,8 @@ public sealed class ApplicationDbContext : DbContext
             GPU = gpu,
             LaunchDate = new DateOnly(2023, 9, 9),
             Litography = 5,
-            Manufacturer = "Qualcomm",
-            Model = "Snapdragon 9999",
+            Manufacturer = "MediaTek",
+            Model = "Dimensity 8200",
         };
 
         var sound = new Sound
@@ -382,6 +422,86 @@ public sealed class ApplicationDbContext : DbContext
                     },
                 },
             },
+            new()
+            {
+                Aperture = 3,
+                Autofocus = Autofocuses.First(af => af == Autofocus.Laser),
+                DigitalZoomValue = 50,
+                FocalLength = 30,
+                HasOpticalZoom = true,
+                Sensor = new ImageSensor
+                {
+                    Format = "ImageSensorFormat",
+                    Manufacturer = "Sony",
+                    Model = "IMX666",
+                },
+                LensType = LensTypes.First(lt => lt == LensType.Wide),
+                Matrix = 200,
+                OpticalZoomValue = 5,
+                PhotoCapabilities = new PhotoCapabilities
+                {
+                    MaxHeight = 12000,
+                    MaxWidth = 6000,
+                },
+                Stabilization = Stabilizations.First(s => s == Stabilization.Optical),
+                PixelSize = 1.4,
+                VideoCapabilities = new VideoCapabilities
+                {
+                    Modes = new List<VideoMode>()
+                    {
+                        new()
+                        {
+                            FrameRate = 30,
+                            Resolution = "4k",
+                        },
+                        new()
+                        {
+                            FrameRate = 120,
+                            Resolution = "FullHD",
+                        },
+                    },
+                },
+            },
+            new()
+            {
+                Aperture = 3,
+                Autofocus = Autofocuses.First(af => af == Autofocus.Laser),
+                DigitalZoomValue = 50,
+                FocalLength = 30,
+                HasOpticalZoom = true,
+                Sensor = new ImageSensor
+                {
+                    Format = "ImageSensorFormat",
+                    Manufacturer = "Sony",
+                    Model = "IMX666",
+                },
+                LensType = LensTypes.First(lt => lt == LensType.Wide),
+                Matrix = 200,
+                OpticalZoomValue = 5,
+                PhotoCapabilities = new PhotoCapabilities
+                {
+                    MaxHeight = 12000,
+                    MaxWidth = 6000,
+                },
+                Stabilization = Stabilizations.First(s => s == Stabilization.Optical),
+                PixelSize = 1.4,
+                VideoCapabilities = new VideoCapabilities
+                {
+                    Modes = new List<VideoMode>()
+                    {
+                        new()
+                        {
+                            FrameRate = 30,
+                            Resolution = "4k",
+                        },
+                        new()
+                        {
+                            FrameRate = 120,
+                            Resolution = "FullHD",
+                        },
+                    },
+                },
+            },
         };
 
         var charging = new Charging
@@ -427,24 +547,59 @@ public sealed class ApplicationDbContext : DbContext
             Cameras = cameras,
         };
 
-        var core2 = new Core
+        var fastCore2 = new Core
         {
-            Architecture = "ArmV9",
+            Clock = 3050,
+            InstructionSet = "ARMv9-A",
+            Microarchitecture = "Cortex-X2",
             LaunchDate = new DateOnly(2021, 9, 1),
         };
 
+        var midCore2 = new Core
+        {
+            Clock = 2850,
+            InstructionSet = "ARMv9-A",
+            Microarchitecture = "A710",
+            LaunchDate = new DateOnly(2021, 9, 1),
+        };
+
+        var slowCore2 = new Core
+        {
+            Clock = 1800,
+            InstructionSet = "ARMv9-A",
+            Microarchitecture = "A510",
+            LaunchDate = new DateOnly(2021, 9, 1),
+        };
+
+        var cores2 = new List<Core>();
+        cores2.Add(fastCore2);
+        for (int i = 0; i < 3; i++)
+        {
+            var mid = new Core()
+            {
+                Clock = midCore2.Clock,
+                InstructionSet = midCore2.InstructionSet,
+                LaunchDate = midCore2.LaunchDate,
+                Microarchitecture = midCore2.Microarchitecture,
+            };
+            cores2.Add(mid);
+        }
+
+        for (int i = 0; i < 4; i++)
+        {
+            var slow = new Core()
+            {
+                Clock = slowCore2.Clock,
+                InstructionSet = slowCore2.InstructionSet,
+                LaunchDate = slowCore2.LaunchDate,
+                Microarchitecture = slowCore2.Microarchitecture,
+            };
+            cores2.Add(slow);
+        }
+
         var cpu2 = new CPU
         {
-            Cores = new List<Core>()
-            {
-                core2,
-                core2,
-                core2,
-                core2,
-            },
-            CoresCount = 12,
-            MaxClock = 900,
-            L3Cache = 8,
+            Cores = cores2,
             TDP = 5,
         };
 
@@ -459,8 +614,8 @@ public sealed class ApplicationDbContext : DbContext
             GPU = gpu2,
             LaunchDate = new DateOnly(2023, 9, 9),
             Litography = 5,
-            Manufacturer = "Qualcomm",
-            Model = "Snapdragon 9999",
+            Manufacturer = "MediaTek",
+            Model = "Dimensity 9200 Plus",
         };
 
         var sound2 = new Sound

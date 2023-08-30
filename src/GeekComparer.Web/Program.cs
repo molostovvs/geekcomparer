@@ -3,11 +3,15 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<ApplicationDbContext>(
-    opt => opt.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
+    opt => opt.UseNpgsql(
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+        //enabled due to low performance while loading smartphones
+        //https://learn.microsoft.com/en-us/ef/core/querying/single-split-queries
+        o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)
+    )
 );
 
 var app = builder.Build();
@@ -22,20 +26,21 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
-
 app.UseAuthorization();
-
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Smartphone}/{action=Index}/{comparisonIds=1_2}"
+    pattern: "{controller=Home}/{action=Index}/"
 );
 
 using var context = app.Services.CreateScope()
    .ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
-context.Seed();
-context.SaveChanges();
+if (!context.Database.EnsureCreated())
+{
+    context.Database.Migrate();
+    context.Seed();
+    context.SaveChanges();
+}
 
 app.Run();
