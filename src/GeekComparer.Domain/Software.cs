@@ -2,7 +2,7 @@ namespace GeekComparer.Domain;
 
 public class Software : ValueObject
 {
-    public Distribution Distribution;
+    public Distribution Distribution { get; set; }
     public OperatingSystem OperatingSystem { get; set; }
     public int DistributionVersion { get; set; }
     public int OperatingSystemVersion { get; set; }
