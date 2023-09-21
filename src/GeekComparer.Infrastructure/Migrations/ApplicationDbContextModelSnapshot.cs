@@ -2179,6 +2179,9 @@ namespace GeekComparer.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<int>("DistributionId")
+                        .HasColumnType("integer");
+
                     b.Property<int>("DistributionVersion")
                         .HasColumnType("integer");
 
@@ -2189,6 +2192,8 @@ namespace GeekComparer.Infrastructure.Migrations
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("DistributionId");
 
                     b.HasIndex("OperatingSystemId");
 
@@ -3281,11 +3286,19 @@ namespace GeekComparer.Infrastructure.Migrations
 
             modelBuilder.Entity("GeekComparer.Domain.Software", b =>
                 {
+                    b.HasOne("GeekComparer.Domain.Distribution", "Distribution")
+                        .WithMany()
+                        .HasForeignKey("DistributionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("GeekComparer.Domain.OperatingSystem", "OperatingSystem")
                         .WithMany()
                         .HasForeignKey("OperatingSystemId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Distribution");
 
                     b.Navigation("OperatingSystem");
                 });
