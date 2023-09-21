@@ -1,0 +1,44 @@
+@using GeekComparer.Domain
+@model List<Smartphone>
+
+@{
+    ViewData["Title"] = "Add first smartphone";
+}
+
+<datalist id="all-smartphones">
+    @foreach (var phone in Model)
+    {
+        if (phone.Manufacturer == phone.Brand)
+        {
+            <option value="@phone.Brand @phone.Model"></option>
+        }
+        else
+        {
+            <option value="@phone.Manufacturer @phone.Brand @phone.Model"></option>
+        }
+    }
+</datalist>
+
+<div style="display: flex; justify-content: center; align-items: center; height: 100vh">
+    <form method="post" asp-controller="Smartphones" asp-action="AddToComparison" style="height: 60px; padding-top: 10px; padding-bottom: 10px;">
+        <div style="display: flex; flex-direction: row; justify-content: center; align-items: center">
+            <div class="m-1">
+                <input type="search"
+                       id="smartphones-search"
+                       class="form-control"
+                       placeholder="Add smartphone..."
+                       list="all-smartphones"
+                       name="chosen"
+                       autocomplete="off"/>
+    
+                <input type="hidden" name="choosen" value="@Model"/>
+            </div>
+    
+            <div class="m-1">
+                <button id="submitAdd" type="submit" class="btn btn-outline-primary">
+                    <i class="bi bi-plus-lg"></i>
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
