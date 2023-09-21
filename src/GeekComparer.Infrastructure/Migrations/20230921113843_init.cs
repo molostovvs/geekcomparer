@@ -686,6 +686,7 @@ namespace GeekComparer.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    DistributionId = table.Column<int>(type: "integer", nullable: false),
                     OperatingSystemId = table.Column<int>(type: "integer", nullable: false),
                     DistributionVersion = table.Column<int>(type: "integer", nullable: false),
                     OperatingSystemVersion = table.Column<int>(type: "integer", nullable: false)
@@ -693,6 +694,12 @@ namespace GeekComparer.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Softwares", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Softwares_Distributions_DistributionId",
+                        column: x => x.DistributionId,
+                        principalTable: "Distributions",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Softwares_OperatingSystems_OperatingSystemId",
                         column: x => x.OperatingSystemId,
@@ -2064,6 +2071,11 @@ namespace GeekComparer.Infrastructure.Migrations
                 column: "GPUId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Softwares_DistributionId",
+                table: "Softwares",
+                column: "DistributionId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Softwares_OperatingSystemId",
                 table: "Softwares",
                 column: "OperatingSystemId");
@@ -2128,9 +2140,6 @@ namespace GeekComparer.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "Cores");
-
-            migrationBuilder.DropTable(
-                name: "Distributions");
 
             migrationBuilder.DropTable(
                 name: "SensorSmartphone");
@@ -2287,6 +2296,9 @@ namespace GeekComparer.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "Gpus");
+
+            migrationBuilder.DropTable(
+                name: "Distributions");
 
             migrationBuilder.DropTable(
                 name: "OperatingSystems");
