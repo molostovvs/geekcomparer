@@ -1,9 +1,7 @@
-@using OperatingSystem = GeekComparer.Domain.OperatingSystem
-@using GeekComparer.Domain
 @model GeekComparer.Web.ViewModels.SmartphonesViewModel
 
 @{
-    ViewData["Title"] = "TEST";
+    ViewData["Title"] = "Comparison";
     var comparedCount = Model.Compared.Count;
 }
 
@@ -78,7 +76,7 @@
 <tbody class="text-center">
 
 <tr>
-    <th>Navigation</th>\
+    <th>Navigation</th>
     <td colspan="@(comparedCount + 1)" style="border-bottom: 1px solid black">
         <a href="#GeneralSection">General</a>
         <a href="#ScreenSection">Screen</a>
@@ -622,7 +620,7 @@
     @foreach (var smartphone in Model.Compared)
     {
         <td style="border-bottom: 1px solid black">
-            @if (smartphone.Software.OperatingSystem == OperatingSystem.iOS)
+            @if (smartphone.Software.OperatingSystem == GeekComparer.Domain.OperatingSystem.iOS)
             {
                 @("-")
             }
