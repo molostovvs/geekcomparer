@@ -8,12 +8,23 @@ builder.Services.AddHealthChecks();
 
 builder.Services.AddDbContext<ApplicationDbContext>(
     opt => opt.UseNpgsql(
-        builder.Configuration.GetConnectionString("DefaultConnection"),
+        builder.Configuration.GetConnectionString("Postgres"),
         //enabled due to low performance while loading smartphones
         //https://learn.microsoft.com/en-us/ef/core/querying/single-split-queries
         o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)
     )
 );
+
+if (builder.Environment.IsProduction())
+    builder.Services.AddStackExchangeRedisCache(
+        opt =>
+        {
+            opt.Configuration = builder.Configuration.GetConnectionString("RedisCache");
+            opt.InstanceName = "geek.cache";
+        }
+    );
+else
+    builder.Services.AddDistributedMemoryCache();
 
 /*
 // configuration for https

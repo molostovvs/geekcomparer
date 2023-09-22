@@ -12,7 +12,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Docker
       - ASPNETCORE_URLS=http://+:80
     ports:
-      - "8080:80"
+      - "80:80"
     restart: always
     healthcheck:
       test: ["CMD-SHELL", "wget -nv -t1 --spider http://localhost:80/healthz || exit 1"]
@@ -22,10 +22,12 @@ services:
     depends_on:
       geek.db:
         condition: service_started
+      geek.cache:
+        condition: service_started
 
   geek.db:
     container_name: geek.db
-    image: postgres
+    image: postgres:16-alpine
     restart: always
     environment:
       POSTGRES_PASSWORD: password
@@ -33,9 +35,29 @@ services:
     ports:
       - "15432:5432"
     volumes:
-      - ./dockerdb-data:/var/lib/postgresql/data/
+      - pg:/data
     healthcheck:
       test: pg_isready -U postgres -d postgres
       interval: 2s
       timeout: 5s
       retries: 5
+  
+  geek.cache:
+    container_name: geek.cache
+    image: redis:7.2.1-alpine
+    restart: always
+    ports:
+      - "16379:6379"
+    volumes:
+      - cache:/data
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli ping | grep PONG"]
+      interval: 2s
+      timeout: 5s
+      retries: 5
+    
+volumes: 
+  cache:
+    driver: local
+  pg:
+    driver: local

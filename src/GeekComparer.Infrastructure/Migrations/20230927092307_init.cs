@@ -31,6 +31,19 @@ namespace GeekComparer.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "AudioCodecs",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AudioCodecs", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Autofocuses",
                 columns: table => new
                 {
@@ -112,19 +125,6 @@ namespace GeekComparer.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Chargings", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Codecs",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(type: "text", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Codecs", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -264,6 +264,19 @@ namespace GeekComparer.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ImageStabilizations",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ImageStabilizations", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "LensTypes",
                 columns: table => new
                 {
@@ -287,6 +300,19 @@ namespace GeekComparer.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Materials", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "MatriceTechnologies",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MatriceTechnologies", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -326,19 +352,6 @@ namespace GeekComparer.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_OperatingSystems", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Panels",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(type: "text", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Panels", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -396,7 +409,7 @@ namespace GeekComparer.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "SimTypes",
+                name: "SimFormats",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
@@ -405,7 +418,7 @@ namespace GeekComparer.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SimTypes", x => x.Id);
+                    table.PrimaryKey("PK_SimFormats", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -419,19 +432,6 @@ namespace GeekComparer.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Speakers", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Stabilizations",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(type: "text", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Stabilizations", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -663,6 +663,41 @@ namespace GeekComparer.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Screens",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    MatriceTechnologyId = table.Column<int>(type: "integer", nullable: false),
+                    Size = table.Column<double>(type: "double precision", nullable: false),
+                    WidthInPixels = table.Column<int>(type: "integer", nullable: false),
+                    HeightInPixels = table.Column<int>(type: "integer", nullable: false),
+                    AspectRatio = table.Column<double>(type: "double precision", nullable: false),
+                    MinRefreshRatio = table.Column<int>(type: "integer", nullable: false),
+                    MaxRefreshRatio = table.Column<int>(type: "integer", nullable: false),
+                    MaxBrightness = table.Column<int>(type: "integer", nullable: false),
+                    HdrBrightness = table.Column<int>(type: "integer", nullable: false),
+                    HdrSupport = table.Column<bool>(type: "boolean", nullable: false),
+                    HdrFormatId = table.Column<int>(type: "integer", nullable: false),
+                    HasDcDimming = table.Column<bool>(type: "boolean", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Screens", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Screens_HdrFormats_HdrFormatId",
+                        column: x => x.HdrFormatId,
+                        principalTable: "HdrFormats",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Screens_MatriceTechnologies_MatriceTechnologyId",
+                        column: x => x.MatriceTechnologyId,
+                        principalTable: "MatriceTechnologies",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Cellulars",
                 columns: table => new
                 {
@@ -704,41 +739,6 @@ namespace GeekComparer.Infrastructure.Migrations
                         name: "FK_Softwares_OperatingSystems_OperatingSystemId",
                         column: x => x.OperatingSystemId,
                         principalTable: "OperatingSystems",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Screens",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    ScreenMatriceTechnologyId = table.Column<int>(type: "integer", nullable: false),
-                    Size = table.Column<double>(type: "double precision", nullable: false),
-                    WidthInPixels = table.Column<int>(type: "integer", nullable: false),
-                    HeightInPixels = table.Column<int>(type: "integer", nullable: false),
-                    AspectRatio = table.Column<double>(type: "double precision", nullable: false),
-                    MinRefreshRatio = table.Column<int>(type: "integer", nullable: false),
-                    MaxRefreshRatio = table.Column<int>(type: "integer", nullable: false),
-                    MaxBrightness = table.Column<int>(type: "integer", nullable: false),
-                    HDRBrightness = table.Column<int>(type: "integer", nullable: false),
-                    HDRSupport = table.Column<bool>(type: "boolean", nullable: false),
-                    HDRFormatId = table.Column<int>(type: "integer", nullable: false),
-                    HasDCDimming = table.Column<bool>(type: "boolean", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Screens", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Screens_HdrFormats_HDRFormatId",
-                        column: x => x.HDRFormatId,
-                        principalTable: "HdrFormats",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Screens_Panels_ScreenMatriceTechnologyId",
-                        column: x => x.ScreenMatriceTechnologyId,
-                        principalTable: "Panels",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -874,7 +874,7 @@ namespace GeekComparer.Infrastructure.Migrations
                     PixelSize = table.Column<double>(type: "double precision", nullable: false),
                     SensorId = table.Column<Guid>(type: "uuid", nullable: false),
                     AutofocusId = table.Column<int>(type: "integer", nullable: false),
-                    ImageStabilizationId = table.Column<int>(type: "integer", nullable: false),
+                    StabilizationId = table.Column<int>(type: "integer", nullable: false),
                     HasOpticalZoom = table.Column<bool>(type: "boolean", nullable: false),
                     OpticalZoomValue = table.Column<int>(type: "integer", nullable: false),
                     DigitalZoomValue = table.Column<int>(type: "integer", nullable: false),
@@ -897,6 +897,12 @@ namespace GeekComparer.Infrastructure.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
+                        name: "FK_Cameras_ImageStabilizations_StabilizationId",
+                        column: x => x.StabilizationId,
+                        principalTable: "ImageStabilizations",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
                         name: "FK_Cameras_LensTypes_LensTypeId",
                         column: x => x.LensTypeId,
                         principalTable: "LensTypes",
@@ -906,12 +912,6 @@ namespace GeekComparer.Infrastructure.Migrations
                         name: "FK_Cameras_PhotoCapabilities_PhotoCapabilitiesId",
                         column: x => x.PhotoCapabilitiesId,
                         principalTable: "PhotoCapabilities",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Cameras_Stabilizations_ImageStabilizationId",
-                        column: x => x.ImageStabilizationId,
-                        principalTable: "Stabilizations",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -1018,11 +1018,11 @@ namespace GeekComparer.Infrastructure.Migrations
                 columns: table => new
                 {
                     CellularId = table.Column<Guid>(type: "uuid", nullable: false),
-                    SimTypeId = table.Column<int>(type: "integer", nullable: false)
+                    SimFormatsId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CellularSimFormat", x => new { x.CellularId, x.SimTypeId });
+                    table.PrimaryKey("PK_CellularSimFormat", x => new { x.CellularId, x.SimFormatsId });
                     table.ForeignKey(
                         name: "FK_CellularSimFormat_Cellulars_CellularId",
                         column: x => x.CellularId,
@@ -1030,9 +1030,9 @@ namespace GeekComparer.Infrastructure.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_CellularSimFormat_SimTypes_SimTypeId",
-                        column: x => x.SimTypeId,
-                        principalTable: "SimTypes",
+                        name: "FK_CellularSimFormat_SimFormats_SimFormatsId",
+                        column: x => x.SimFormatsId,
+                        principalTable: "SimFormats",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -1096,9 +1096,9 @@ namespace GeekComparer.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_AudioCodecSound", x => new { x.CodecsId, x.SoundId });
                     table.ForeignKey(
-                        name: "FK_AudioCodecSound_Codecs_CodecsId",
+                        name: "FK_AudioCodecSound_AudioCodecs_CodecsId",
                         column: x => x.CodecsId,
-                        principalTable: "Codecs",
+                        principalTable: "AudioCodecs",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -1143,7 +1143,7 @@ namespace GeekComparer.Infrastructure.Migrations
                     CellularId = table.Column<Guid>(type: "uuid", nullable: false),
                     WiFiId = table.Column<Guid>(type: "uuid", nullable: false),
                     BluetoothId = table.Column<Guid>(type: "uuid", nullable: false),
-                    USBId = table.Column<Guid>(type: "uuid", nullable: false),
+                    UsbId = table.Column<Guid>(type: "uuid", nullable: false),
                     HasNFC = table.Column<bool>(type: "boolean", nullable: false),
                     HasIR = table.Column<bool>(type: "boolean", nullable: false),
                     HasUWB = table.Column<bool>(type: "boolean", nullable: false)
@@ -1164,8 +1164,8 @@ namespace GeekComparer.Infrastructure.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Connectivities_Usbs_USBId",
-                        column: x => x.USBId,
+                        name: "FK_Connectivities_Usbs_UsbId",
+                        column: x => x.UsbId,
                         principalTable: "Usbs",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -1242,7 +1242,7 @@ namespace GeekComparer.Infrastructure.Migrations
                     MemoryId = table.Column<Guid>(type: "uuid", nullable: false),
                     ScreenId = table.Column<Guid>(type: "uuid", nullable: false),
                     SecurityId = table.Column<Guid>(type: "uuid", nullable: false),
-                    SoCId = table.Column<Guid>(type: "uuid", nullable: false),
+                    SocId = table.Column<Guid>(type: "uuid", nullable: false),
                     SoftwareId = table.Column<Guid>(type: "uuid", nullable: false),
                     SoundId = table.Column<Guid>(type: "uuid", nullable: false),
                     MarketSegmentId = table.Column<int>(type: "integer", nullable: false),
@@ -1306,8 +1306,8 @@ namespace GeekComparer.Infrastructure.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Smartphones_SoCs_SoCId",
-                        column: x => x.SoCId,
+                        name: "FK_Smartphones_SoCs_SocId",
+                        column: x => x.SocId,
                         principalTable: "SoCs",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -1374,6 +1374,19 @@ namespace GeekComparer.Infrastructure.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "AudioCodecs",
+                columns: new[] { "Id", "Name" },
+                values: new object[,]
+                {
+                    { 1, "SBC" },
+                    { 2, "aptX" },
+                    { 3, "aptX_HD" },
+                    { 4, "LDAC" },
+                    { 5, "LHDC" },
+                    { 6, "LLAC" }
+                });
+
+            migrationBuilder.InsertData(
                 table: "Autofocuses",
                 columns: new[] { "Id", "Name" },
                 values: new object[,]
@@ -1402,19 +1415,6 @@ namespace GeekComparer.Infrastructure.Migrations
                     { 1, "Flagship" },
                     { 2, "Mid" },
                     { 3, "Budget" }
-                });
-
-            migrationBuilder.InsertData(
-                table: "Codecs",
-                columns: new[] { "Id", "Name" },
-                values: new object[,]
-                {
-                    { 1, "SBC" },
-                    { 2, "aptX" },
-                    { 3, "aptX_HD" },
-                    { 4, "LDAC" },
-                    { 5, "LHDC" },
-                    { 6, "LLAC" }
                 });
 
             migrationBuilder.InsertData(
@@ -1583,6 +1583,15 @@ namespace GeekComparer.Infrastructure.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "ImageStabilizations",
+                columns: new[] { "Id", "Name" },
+                values: new object[,]
+                {
+                    { 1, "Optical" },
+                    { 2, "Digital" }
+                });
+
+            migrationBuilder.InsertData(
                 table: "LensTypes",
                 columns: new[] { "Id", "Name" },
                 values: new object[,]
@@ -1604,6 +1613,16 @@ namespace GeekComparer.Infrastructure.Migrations
                     { 3, "Plastic" },
                     { 4, "Carbon" },
                     { 5, "Ceramic" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "MatriceTechnologies",
+                columns: new[] { "Id", "Name" },
+                values: new object[,]
+                {
+                    { 1, "IPS" },
+                    { 2, "OLED" },
+                    { 3, "EInk" }
                 });
 
             migrationBuilder.InsertData(
@@ -1642,16 +1661,6 @@ namespace GeekComparer.Infrastructure.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "Panels",
-                columns: new[] { "Id", "Name" },
-                values: new object[,]
-                {
-                    { 1, "IPS" },
-                    { 2, "OLED" },
-                    { 3, "EInk" }
-                });
-
-            migrationBuilder.InsertData(
                 table: "RamTypes",
                 columns: new[] { "Id", "Name" },
                 values: new object[,]
@@ -1682,7 +1691,7 @@ namespace GeekComparer.Infrastructure.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "SimTypes",
+                table: "SimFormats",
                 columns: new[] { "Id", "Name" },
                 values: new object[,]
                 {
@@ -1701,15 +1710,6 @@ namespace GeekComparer.Infrastructure.Migrations
                 {
                     { 1, "Mono" },
                     { 2, "Stereo" }
-                });
-
-            migrationBuilder.InsertData(
-                table: "Stabilizations",
-                columns: new[] { "Id", "Name" },
-                values: new object[,]
-                {
-                    { 1, "Optical" },
-                    { 2, "Digital" }
                 });
 
             migrationBuilder.InsertData(
@@ -1866,11 +1866,6 @@ namespace GeekComparer.Infrastructure.Migrations
                 column: "AutofocusId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Cameras_ImageStabilizationId",
-                table: "Cameras",
-                column: "ImageStabilizationId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Cameras_LensTypeId",
                 table: "Cameras",
                 column: "LensTypeId");
@@ -1884,6 +1879,11 @@ namespace GeekComparer.Infrastructure.Migrations
                 name: "IX_Cameras_SensorId",
                 table: "Cameras",
                 column: "SensorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Cameras_StabilizationId",
+                table: "Cameras",
+                column: "StabilizationId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Cameras_VideoCapabilitiesId",
@@ -1911,9 +1911,9 @@ namespace GeekComparer.Infrastructure.Migrations
                 column: "MultiSimModeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CellularSimFormat_SimTypeId",
+                name: "IX_CellularSimFormat_SimFormatsId",
                 table: "CellularSimFormat",
-                column: "SimTypeId");
+                column: "SimFormatsId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CellularThreeGBand_CellularId",
@@ -1936,9 +1936,9 @@ namespace GeekComparer.Infrastructure.Migrations
                 column: "CellularId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Connectivities_USBId",
+                name: "IX_Connectivities_UsbId",
                 table: "Connectivities",
-                column: "USBId");
+                column: "UsbId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Connectivities_WiFiId",
@@ -1971,14 +1971,14 @@ namespace GeekComparer.Infrastructure.Migrations
                 column: "TypeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Screens_HDRFormatId",
+                name: "IX_Screens_HdrFormatId",
                 table: "Screens",
-                column: "HDRFormatId");
+                column: "HdrFormatId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Screens_ScreenMatriceTechnologyId",
+                name: "IX_Screens_MatriceTechnologyId",
                 table: "Screens",
-                column: "ScreenMatriceTechnologyId");
+                column: "MatriceTechnologyId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_SensorSmartphone_SmartphoneId",
@@ -2046,9 +2046,9 @@ namespace GeekComparer.Infrastructure.Migrations
                 column: "SecurityId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Smartphones_SoCId",
+                name: "IX_Smartphones_SocId",
                 table: "Smartphones",
-                column: "SoCId");
+                column: "SocId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Smartphones_SoftwareId",
@@ -2154,7 +2154,7 @@ namespace GeekComparer.Infrastructure.Migrations
                 name: "WiFiWiFiStandard");
 
             migrationBuilder.DropTable(
-                name: "Codecs");
+                name: "AudioCodecs");
 
             migrationBuilder.DropTable(
                 name: "Cameras");
@@ -2166,7 +2166,7 @@ namespace GeekComparer.Infrastructure.Migrations
                 name: "FourGBands");
 
             migrationBuilder.DropTable(
-                name: "SimTypes");
+                name: "SimFormats");
 
             migrationBuilder.DropTable(
                 name: "ThreeGBands");
@@ -2196,13 +2196,13 @@ namespace GeekComparer.Infrastructure.Migrations
                 name: "ImageSensors");
 
             migrationBuilder.DropTable(
+                name: "ImageStabilizations");
+
+            migrationBuilder.DropTable(
                 name: "LensTypes");
 
             migrationBuilder.DropTable(
                 name: "PhotoCapabilities");
-
-            migrationBuilder.DropTable(
-                name: "Stabilizations");
 
             migrationBuilder.DropTable(
                 name: "VideoCapabilities");
@@ -2289,7 +2289,7 @@ namespace GeekComparer.Infrastructure.Migrations
                 name: "HdrFormats");
 
             migrationBuilder.DropTable(
-                name: "Panels");
+                name: "MatriceTechnologies");
 
             migrationBuilder.DropTable(
                 name: "Cpus");

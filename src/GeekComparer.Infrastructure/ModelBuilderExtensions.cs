@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Reflection;
 using CSharpFunctionalExtensions;
-using GeekComparer.Domain.ValueObjects;
 
 namespace GeekComparer.Infrastructure;
 
@@ -51,7 +50,7 @@ public static class ModelBuilderExtensions
     public static void ConfigureManyToMany(this ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Connectivity>().HasMany(c => c.NavigationSystems).WithMany();
-        modelBuilder.Entity<Cellular>().HasMany(c => c.SimType).WithMany();
+        modelBuilder.Entity<Cellular>().HasMany(c => c.SimFormats).WithMany();
         modelBuilder.Entity<Cellular>().HasMany(c => c.Bands2G).WithMany();
         modelBuilder.Entity<Cellular>().HasMany(c => c.Bands3G).WithMany();
         modelBuilder.Entity<Cellular>().HasMany(c => c.Bands4G).WithMany();

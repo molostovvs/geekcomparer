@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace GeekComparer.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230924114038_init")]
+    [Migration("20230927092307_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -90,12 +90,12 @@ namespace GeekComparer.Infrastructure.Migrations
                     b.Property<Guid>("CellularId")
                         .HasColumnType("uuid");
 
-                    b.Property<int>("SimTypeId")
+                    b.Property<int>("SimFormatsId")
                         .HasColumnType("integer");
 
-                    b.HasKey("CellularId", "SimTypeId");
+                    b.HasKey("CellularId", "SimFormatsId");
 
-                    b.HasIndex("SimTypeId");
+                    b.HasIndex("SimFormatsId");
 
                     b.ToTable("CellularSimFormat");
                 });
@@ -158,7 +158,7 @@ namespace GeekComparer.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Codecs");
+                    b.ToTable("AudioCodecs");
 
                     b.HasData(
                         new
@@ -1017,7 +1017,7 @@ namespace GeekComparer.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Stabilizations");
+                    b.ToTable("ImageStabilizations");
 
                     b.HasData(
                         new
@@ -1303,7 +1303,7 @@ namespace GeekComparer.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Panels");
+                    b.ToTable("MatriceTechnologies");
 
                     b.HasData(
                         new
@@ -1389,7 +1389,7 @@ namespace GeekComparer.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("SimTypes");
+                    b.ToTable("SimFormats");
 
                     b.HasData(
                         new
@@ -1939,7 +1939,7 @@ namespace GeekComparer.Infrastructure.Migrations
                     b.Property<Guid>("SecurityId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("SoCId")
+                    b.Property<Guid>("SocId")
                         .HasColumnType("uuid");
 
                     b.Property<Guid>("SoftwareId")
@@ -1974,7 +1974,7 @@ namespace GeekComparer.Infrastructure.Migrations
 
                     b.HasIndex("SecurityId");
 
-                    b.HasIndex("SoCId");
+                    b.HasIndex("SocId");
 
                     b.HasIndex("SoftwareId");
 
@@ -1983,7 +1983,7 @@ namespace GeekComparer.Infrastructure.Migrations
                     b.ToTable("Smartphones");
                 });
 
-            modelBuilder.Entity("GeekComparer.Domain.SoC", b =>
+            modelBuilder.Entity("GeekComparer.Domain.Soc", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -2211,9 +2211,6 @@ namespace GeekComparer.Infrastructure.Migrations
                     b.Property<bool>("HasOpticalZoom")
                         .HasColumnType("boolean");
 
-                    b.Property<int>("ImageStabilizationId")
-                        .HasColumnType("integer");
-
                     b.Property<int>("LensTypeId")
                         .HasColumnType("integer");
 
@@ -2232,6 +2229,9 @@ namespace GeekComparer.Infrastructure.Migrations
                     b.Property<Guid>("SensorId")
                         .HasColumnType("uuid");
 
+                    b.Property<int>("StabilizationId")
+                        .HasColumnType("integer");
+
                     b.Property<Guid>("VideoCapabilitiesId")
                         .HasColumnType("uuid");
 
@@ -2239,13 +2239,13 @@ namespace GeekComparer.Infrastructure.Migrations
 
                     b.HasIndex("AutofocusId");
 
-                    b.HasIndex("ImageStabilizationId");
-
                     b.HasIndex("LensTypeId");
 
                     b.HasIndex("PhotoCapabilitiesId");
 
                     b.HasIndex("SensorId");
+
+                    b.HasIndex("StabilizationId");
 
                     b.HasIndex("VideoCapabilitiesId");
 
@@ -2324,7 +2324,7 @@ namespace GeekComparer.Infrastructure.Migrations
                     b.Property<bool>("HasUWB")
                         .HasColumnType("boolean");
 
-                    b.Property<Guid>("USBId")
+                    b.Property<Guid>("UsbId")
                         .HasColumnType("uuid");
 
                     b.Property<Guid>("WiFiId")
@@ -2336,7 +2336,7 @@ namespace GeekComparer.Infrastructure.Migrations
 
                     b.HasIndex("CellularId");
 
-                    b.HasIndex("USBId");
+                    b.HasIndex("UsbId");
 
                     b.HasIndex("WiFiId");
 
@@ -2555,19 +2555,22 @@ namespace GeekComparer.Infrastructure.Migrations
                     b.Property<double>("AspectRatio")
                         .HasColumnType("double precision");
 
-                    b.Property<int>("HDRBrightness")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("HDRFormatId")
-                        .HasColumnType("integer");
-
-                    b.Property<bool>("HDRSupport")
+                    b.Property<bool>("HasDcDimming")
                         .HasColumnType("boolean");
 
-                    b.Property<bool>("HasDCDimming")
+                    b.Property<int>("HdrBrightness")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("HdrFormatId")
+                        .HasColumnType("integer");
+
+                    b.Property<bool>("HdrSupport")
                         .HasColumnType("boolean");
 
                     b.Property<int>("HeightInPixels")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("MatriceTechnologyId")
                         .HasColumnType("integer");
 
                     b.Property<int>("MaxBrightness")
@@ -2579,9 +2582,6 @@ namespace GeekComparer.Infrastructure.Migrations
                     b.Property<int>("MinRefreshRatio")
                         .HasColumnType("integer");
 
-                    b.Property<int>("ScreenMatriceTechnologyId")
-                        .HasColumnType("integer");
-
                     b.Property<double>("Size")
                         .HasColumnType("double precision");
 
@@ -2590,9 +2590,9 @@ namespace GeekComparer.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("HDRFormatId");
+                    b.HasIndex("HdrFormatId");
 
-                    b.HasIndex("ScreenMatriceTechnologyId");
+                    b.HasIndex("MatriceTechnologyId");
 
                     b.ToTable("Screens");
                 });
@@ -2885,7 +2885,7 @@ namespace GeekComparer.Infrastructure.Migrations
 
                     b.HasOne("GeekComparer.Domain.Enums.SimFormat", null)
                         .WithMany()
-                        .HasForeignKey("SimTypeId")
+                        .HasForeignKey("SimFormatsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -2991,9 +2991,9 @@ namespace GeekComparer.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("GeekComparer.Domain.SoC", "SoC")
+                    b.HasOne("GeekComparer.Domain.Soc", "Soc")
                         .WithMany()
-                        .HasForeignKey("SoCId")
+                        .HasForeignKey("SocId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -3027,14 +3027,14 @@ namespace GeekComparer.Infrastructure.Migrations
 
                     b.Navigation("Security");
 
-                    b.Navigation("SoC");
+                    b.Navigation("Soc");
 
                     b.Navigation("Software");
 
                     b.Navigation("Sound");
                 });
 
-            modelBuilder.Entity("GeekComparer.Domain.SoC", b =>
+            modelBuilder.Entity("GeekComparer.Domain.Soc", b =>
                 {
                     b.HasOne("GeekComparer.Domain.ValueObjects.Cpu", "Cpu")
                         .WithMany()
@@ -3142,12 +3142,6 @@ namespace GeekComparer.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("GeekComparer.Domain.Enums.ImageStabilization", "ImageStabilization")
-                        .WithMany()
-                        .HasForeignKey("ImageStabilizationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("GeekComparer.Domain.Enums.LensType", "LensType")
                         .WithMany()
                         .HasForeignKey("LensTypeId")
@@ -3166,6 +3160,12 @@ namespace GeekComparer.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("GeekComparer.Domain.Enums.ImageStabilization", "Stabilization")
+                        .WithMany()
+                        .HasForeignKey("StabilizationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("GeekComparer.Domain.ValueObjects.VideoCapabilities", "VideoCapabilities")
                         .WithMany()
                         .HasForeignKey("VideoCapabilitiesId")
@@ -3174,13 +3174,13 @@ namespace GeekComparer.Infrastructure.Migrations
 
                     b.Navigation("Autofocus");
 
-                    b.Navigation("ImageStabilization");
-
                     b.Navigation("LensType");
 
                     b.Navigation("PhotoCapabilities");
 
                     b.Navigation("Sensor");
+
+                    b.Navigation("Stabilization");
 
                     b.Navigation("VideoCapabilities");
                 });
@@ -3210,9 +3210,9 @@ namespace GeekComparer.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("GeekComparer.Domain.ValueObjects.Usb", "USB")
+                    b.HasOne("GeekComparer.Domain.ValueObjects.Usb", "Usb")
                         .WithMany()
-                        .HasForeignKey("USBId")
+                        .HasForeignKey("UsbId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -3226,7 +3226,7 @@ namespace GeekComparer.Infrastructure.Migrations
 
                     b.Navigation("Cellular");
 
-                    b.Navigation("USB");
+                    b.Navigation("Usb");
 
                     b.Navigation("WiFi");
                 });
@@ -3270,21 +3270,21 @@ namespace GeekComparer.Infrastructure.Migrations
 
             modelBuilder.Entity("GeekComparer.Domain.ValueObjects.Screen", b =>
                 {
-                    b.HasOne("GeekComparer.Domain.Enums.HdrFormat", "HDRFormat")
+                    b.HasOne("GeekComparer.Domain.Enums.HdrFormat", "HdrFormat")
                         .WithMany()
-                        .HasForeignKey("HDRFormatId")
+                        .HasForeignKey("HdrFormatId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("GeekComparer.Domain.Enums.ScreenMatriceTechnology", "ScreenMatriceTechnology")
+                    b.HasOne("GeekComparer.Domain.Enums.ScreenMatriceTechnology", "MatriceTechnology")
                         .WithMany()
-                        .HasForeignKey("ScreenMatriceTechnologyId")
+                        .HasForeignKey("MatriceTechnologyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("HDRFormat");
+                    b.Navigation("HdrFormat");
 
-                    b.Navigation("ScreenMatriceTechnology");
+                    b.Navigation("MatriceTechnology");
                 });
 
             modelBuilder.Entity("GeekComparer.Domain.ValueObjects.Software", b =>

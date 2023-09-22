@@ -6,7 +6,7 @@ public class Connectivity : ValueObject
     public WiFi WiFi { get; set; }
     public Bluetooth Bluetooth { get; set; }
     public IReadOnlyList<NavigationSystem> NavigationSystems { get; set; }
-    public Usb USB { get; set; }
+    public Usb Usb { get; set; }
     public bool HasNFC { get; set; }
     public bool HasIR { get; set; }
     public bool HasUWB { get; set; }
@@ -20,6 +20,6 @@ public class Connectivity : ValueObject
         foreach (var ns in NavigationSystems)
             yield return ns;
 
-        yield return USB;
+        yield return Usb;
     }
 }

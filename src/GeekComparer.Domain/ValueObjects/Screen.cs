@@ -2,7 +2,7 @@ namespace GeekComparer.Domain.ValueObjects;
 
 public class Screen : ValueObject
 {
-    public ScreenMatriceTechnology ScreenMatriceTechnology { get; set; }
+    public ScreenMatriceTechnology MatriceTechnology { get; set; }
     public double Size { get; set; }
     public int WidthInPixels { get; set; }
     public int HeightInPixels { get; set; }
@@ -10,14 +10,14 @@ public class Screen : ValueObject
     public int MinRefreshRatio { get; set; }
     public int MaxRefreshRatio { get; set; }
     public int MaxBrightness { get; set; }
-    public int HDRBrightness { get; set; }
-    public bool HDRSupport { get; set; }
-    public HdrFormat HDRFormat { get; set; }
-    public bool HasDCDimming { get; set; }
+    public int HdrBrightness { get; set; }
+    public bool HdrSupport { get; set; }
+    public HdrFormat HdrFormat { get; set; }
+    public bool HasDcDimming { get; set; }
 
     protected override IEnumerable<IComparable> GetEqualityComponents()
     {
-        yield return ScreenMatriceTechnology;
+        yield return MatriceTechnology;
         yield return Size;
         yield return WidthInPixels;
         yield return HeightInPixels;
@@ -25,9 +25,9 @@ public class Screen : ValueObject
         yield return MinRefreshRatio;
         yield return MaxRefreshRatio;
         yield return MaxBrightness;
-        yield return HDRBrightness;
-        yield return HDRSupport;
-        yield return HDRFormat;
-        yield return HasDCDimming;
+        yield return HdrBrightness;
+        yield return HdrSupport;
+        yield return HdrFormat;
+        yield return HasDcDimming;
     }
 }

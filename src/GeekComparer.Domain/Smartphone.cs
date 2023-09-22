@@ -16,7 +16,7 @@ public class Smartphone : Entity<Guid>
     public Screen Screen { get; set; }
     public Security Security { get; set; }
     public IReadOnlyList<Sensor> Sensors { get; set; }
-    public SoC SoC { get; set; }
+    public Soc Soc { get; set; }
     public Software Software { get; set; }
     public Sound Sound { get; set; }
     public MarketSegment MarketSegment { get; set; }
