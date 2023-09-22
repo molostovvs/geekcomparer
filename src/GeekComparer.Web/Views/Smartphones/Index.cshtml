@@ -6,16 +6,9 @@
 }
 
 <datalist id="all-smartphones">
-    @foreach (var phone in Model.NotCompared)
+    @foreach (var phoneModel in Model.NotCompared)
     {
-        if (phone.Manufacturer == phone.Brand)
-        {
-            <option value="@phone.Brand @phone.Model"></option>
-        }
-        else
-        {
-            <option value="@phone.Manufacturer @phone.Brand @phone.Model"></option>
-        }
+        <option value="@phoneModel"></option>
     }
 </datalist>
 
@@ -35,7 +28,7 @@
                 <input type="hidden" name="comparedIds" value="@sm.Id"/>
             }
 
-            <input type="hidden" name="choosen" value="@Model"/>
+            <input type="hidden" name="chosen" value="@Model"/>
         </div>
 
         <div class="m-1">
@@ -47,7 +40,7 @@
 </form>
 
 <div class="table-container" onscroll="removeHash()">
-<table class="compare-table" style="margin: auto">
+<table class="compare-table">
 
 <thead>
 <th class="text-center">
@@ -90,8 +83,8 @@
         <a href="#SoundSection">Sound</a>
         <a href="#ConnectivitySection">Connectivity</a>
         <a href="#CamerasSection">Cameras</a>
-        <a href="#BenchmarkSection">Cameras</a>
-        <a href="#OtherSection">Cameras</a>
+        <a href="#BenchmarkSection">Benchmarks</a>
+        <a href="#OtherSection">Other</a>
     </td>
 </tr>
 
@@ -102,16 +95,6 @@
         General
     </td>
 </tr>
-
-@*<tr>
-    <th>Id</th>
-    @foreach (var smartphone in Model.Compared)
-    {
-        <td>
-            @smartphone.Id
-        </td>
-    }
-</tr>*@
 
 <tr>
     <th>Manufacturer</th>
@@ -175,7 +158,7 @@
     @foreach (var smartphone in Model.Compared)
     {
         <td>
-            @smartphone.Screen.ScreenMatriceTechnology.Name
+            @smartphone.Screen.MatriceTechnology
         </td>
     }
 </tr>
@@ -234,9 +217,9 @@
     @foreach (var smartphone in Model.Compared)
     {
         <td>
-            @if (smartphone.Screen.HDRSupport)
+            @if (smartphone.Screen.HdrSupport)
             {
-                @($"{smartphone.Screen.HDRFormat}, {@smartphone.Screen.HDRBrightness} nits")
+                @($"{smartphone.Screen.HdrFormat}, {@smartphone.Screen.HdrBrightness} nits")
             }
         </td>
     }
@@ -247,7 +230,7 @@
     @foreach (var smartphone in Model.Compared)
     {
         <td style="border-bottom: 1px solid black">
-            @smartphone.Screen.HasDCDimming
+            @smartphone.Screen.HasDcDimming
         </td>
     }
 </tr>
@@ -344,7 +327,7 @@
     @foreach (var smartphone in Model.Compared)
     {
         <td>
-            @smartphone.Body.FingerprintLocation.Name
+            @smartphone.Body.FingerprintLocation
         </td>
     }
 </tr>
@@ -371,17 +354,17 @@
     @foreach (var smartphone in Model.Compared)
     {
         <td>
-            @smartphone.SoC.Manufacturer @smartphone.SoC.Model
+            @smartphone.Soc.Manufacturer @smartphone.Soc.Model
         </td>
     }
 </tr>
 
 <tr>
-    <th>Litography</th>
+    <th>Lithography</th>
     @foreach (var smartphone in Model.Compared)
     {
         <td>
-            @smartphone.SoC.Litography nm
+            @smartphone.Soc.Litography nm
         </td>
     }
 </tr>
@@ -391,7 +374,7 @@
     @foreach (var smartphone in Model.Compared)
     {
         <td>
-            @smartphone.SoC.LaunchDate
+            @smartphone.Soc.LaunchDate
         </td>
     }
 </tr>
@@ -421,7 +404,7 @@
             <table class="inline-table">
                 <tr style="height: 100%">
                     @{
-                        var groupedCores = smartphone.SoC.Cpu.Cores.GroupBy(c => new
+                        var groupedCores = smartphone.Soc.Cpu.Cores.GroupBy(c => new
                         {
                             c.Microarchitecture,
                             c.Clock,
@@ -439,7 +422,7 @@
                 </tr>
                 <tr style="height: 100%;">
                     <td>
-                        @smartphone.SoC.Cpu.Tdp
+                        @smartphone.Soc.Cpu.Tdp
                     </td>
                 </tr>
             </table>
@@ -471,10 +454,10 @@
         <td class="inline-table-parent" style="border-bottom: 1px solid black;">
             <table class="inline-table">
                 <tr>
-                    <td>@smartphone.SoC.Gpu.Model</td>
+                    <td>@smartphone.Soc.Gpu.Model</td>
                 </tr>
                 <tr>
-                    <td>@smartphone.SoC.Gpu.MaxClock</td>
+                    <td>@smartphone.Soc.Gpu.MaxClock</td>
                 </tr>
             </table>
         </td>
@@ -620,7 +603,7 @@
     @foreach (var smartphone in Model.Compared)
     {
         <td style="border-bottom: 1px solid black">
-            @if (smartphone.Software.OperatingSystem == GeekComparer.Domain.OperatingSystem.iOS)
+            @if (smartphone.Software.OperatingSystem == GeekComparer.Domain.OperatingSystem.iOS.Name)
             {
                 @("-")
             }
@@ -703,16 +686,16 @@
         <td class="inline-table-parent" style="border-bottom: 1px solid black">
             <table class="inline-table">
                 <tr>
-                    <td>@($"{smartphone.Battery.Life.WebBrowsing.Value.Hours}h {smartphone.Battery.Life.WebBrowsing.Value.Minutes}m")</td>
+                    <td>@($"{smartphone.Battery.Life.WebBrowsing.Hours}h {smartphone.Battery.Life.WebBrowsing.Minutes}m")</td>
                 </tr>
                 <tr>
-                    <td>@($"{smartphone.Battery.Life.Video.Value.Hours}h {smartphone.Battery.Life.Video.Value.Minutes}m")</td>
+                    <td>@($"{smartphone.Battery.Life.Video.Hours}h {smartphone.Battery.Life.Video.Minutes}m")</td>
                 </tr>
                 <tr>
-                    <td>@($"{smartphone.Battery.Life.Gaming.Value.Hours}h {smartphone.Battery.Life.Gaming.Value.Minutes}m")</td>
+                    <td>@($"{smartphone.Battery.Life.Gaming.Hours}h {smartphone.Battery.Life.Gaming.Minutes}m")</td>
                 </tr>
                 <tr>
-                    <td>@($"{smartphone.Battery.Life.Standby.Value.Hours}h {smartphone.Battery.Life.Standby.Value.Minutes}m")</td>
+                    <td>@($"{smartphone.Battery.Life.Standby.Hours}h {smartphone.Battery.Life.Standby.Minutes}m")</td>
                 </tr>
             </table>
         </td>
@@ -852,7 +835,7 @@
 
 <tr>
     <th>
-        Scaners
+        Scanners
     </th>
     @foreach (var smartphone in Model.Compared)
     {
@@ -962,14 +945,14 @@
         <td class="inline-table-parent">
             <table class="inline-table">
                 <tr>
-                    <td>@smartphone.Connectivity.USB.Connector</td>
+                    <td>@smartphone.Connectivity.Usb.Connector</td>
                 </tr>
                 <tr>
-                    <td>@smartphone.Connectivity.USB.Version</td>
+                    <td>@smartphone.Connectivity.Usb.Version</td>
                 </tr>
                 <tr style="height: 100%">
                     <td>
-                        @foreach (var x in smartphone.Connectivity.USB.Features)
+                        @foreach (var x in smartphone.Connectivity.Usb.Features)
                         {
                             <p style="margin-bottom: 0">@x</p>
                         }
@@ -1002,7 +985,7 @@
     @foreach (var smartphone in Model.Compared)
     {
         <td>
-            @("WiFi " + smartphone.Connectivity.WiFi.Standards.Max(w => w.Id) + " (" + string.Join(", ", smartphone.Connectivity.WiFi.Standards) + ")")
+            @("(" + string.Join(", ", smartphone.Connectivity.WiFi.Standards) + ")")
         </td>
     }
 </tr>
@@ -1043,7 +1026,7 @@
                     <td>@smartphone.Connectivity.Cellular.SimCount</td>
                 </tr>
                 <tr>
-                    <td>@(string.Join(", ", smartphone.Connectivity.Cellular.SimType))</td>
+                    <td>@(string.Join(", ", smartphone.Connectivity.Cellular.SimFormats))</td>
                 </tr>
                 <tr>
                     <td>@smartphone.Connectivity.Cellular.MultiSimMode</td>
@@ -1052,13 +1035,13 @@
                     <td>@(string.Join(", ", smartphone.Connectivity.Cellular.Bands2G))</td>
                 </tr>
                 <tr>
-                    <td>@(string.Join(", ", smartphone.Connectivity.Cellular.Bands3G.Select(b => b.Id)))</td>
+                    <td>@(string.Join(", ", smartphone.Connectivity.Cellular.Bands3G))</td>
                 </tr>
                 <tr>
-                    <td>@(string.Join(", ", smartphone.Connectivity.Cellular.Bands4G.Select(b => b.Id)))</td>
+                    <td>@(string.Join(", ", smartphone.Connectivity.Cellular.Bands4G))</td>
                 </tr>
                 <tr>
-                    <td>@(string.Join(", ", smartphone.Connectivity.Cellular.Bands5G.Select(b => b.Id)))</td>
+                    <td>@(string.Join(", ", smartphone.Connectivity.Cellular.Bands5G))</td>
                 </tr>
 
             </table>
@@ -1228,7 +1211,7 @@
                         <td>@smartphone.Cameras[i].Sensor.Format (TODO)</td>
                     </tr>
                     <tr>
-                        <td>@smartphone.Cameras[i].ImageStabilization</td>
+                        <td>@smartphone.Cameras[i].Stabilization</td>
                     </tr>
                     <tr>
                         <td>@smartphone.Cameras[i].FocalLength mm</td>
@@ -1480,7 +1463,7 @@
     @foreach (var smartphone in Model.Compared)
     {
         <td>
-            @foreach (var sensor in smartphone.Sensors.OrderBy(s => s.Name))
+            @foreach (var sensor in smartphone.Sensors.OrderBy(s => s))
             {
                 <p style="margin-bottom: 0">@sensor</p>
             }
@@ -1512,6 +1495,8 @@ table.compare-table {
 	scroll-behavior: smooth;
 	border-collapse: separate;
 	border-spacing: 0;
+	margin: 0;
+	width: 100%;
 }
 
 div.table-container {
@@ -1520,6 +1505,8 @@ div.table-container {
     padding-bottom: 10px;
     scrollbar-width: auto;
     scrollbar-color: lightgray lightgray;
+    display: flex;
+    justify-content: center;
 }
 
 td.inline-table-parent, th.inline-table-parent {
@@ -1576,10 +1563,10 @@ td, th {
 
 </style>
 
-@* script from SO to remove fragment from url *@
+@*script from SO to remove fragment from url
 <script>
     function removeHash () {
         history.pushState("", document.title, window.location.pathname
                                                            + window.location.search);
     }
-</script>
+</script>*@

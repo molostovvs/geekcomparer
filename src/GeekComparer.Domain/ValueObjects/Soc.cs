@@ -1,6 +1,6 @@
 namespace GeekComparer.Domain;
 
-public class SoC : ValueObject
+public class Soc : ValueObject
 {
     public string Manufacturer { get; set; }
     public string Model { get; set; }

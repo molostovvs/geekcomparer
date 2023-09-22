@@ -1,21 +1,14 @@
 @using GeekComparer.Domain
-@model List<Smartphone>
+@model List<string>
 
 @{
     ViewData["Title"] = "Add first smartphone";
 }
 
 <datalist id="all-smartphones">
-    @foreach (var phone in Model)
+    @foreach (var phoneModel in Model)
     {
-        if (phone.Manufacturer == phone.Brand)
-        {
-            <option value="@phone.Brand @phone.Model"></option>
-        }
-        else
-        {
-            <option value="@phone.Manufacturer @phone.Brand @phone.Model"></option>
-        }
+            <option value="@phoneModel"></option>
     }
 </datalist>
 

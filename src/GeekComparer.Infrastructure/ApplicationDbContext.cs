@@ -1,6 +1,5 @@
 using CSharpFunctionalExtensions;
 using GeekComparer.Domain.Enums;
-using GeekComparer.Domain.ValueObjects;
 using GeekComparer.Infrastructure.Converters;
 
 namespace GeekComparer.Infrastructure;
@@ -38,7 +37,7 @@ public sealed class ApplicationDbContext : DbContext
     public DbSet<Storage> Storages { get; set; }
     public DbSet<Screen> Screens { get; set; }
     public DbSet<Security> Securities { get; set; }
-    public DbSet<SoC> SoCs { get; set; }
+    public DbSet<Soc> SoCs { get; set; }
     public DbSet<Gpu> Gpus { get; set; }
     public DbSet<Cpu> Cpus { get; set; }
     public DbSet<Core> Cores { get; set; }
@@ -52,22 +51,22 @@ public sealed class ApplicationDbContext : DbContext
     public DbSet<FiveGBand> FiveGBands { get; set; }
     public DbSet<MarketSegment> Categories { get; set; }
     public DbSet<MultiSimMode> MultiSimModes { get; set; }
-    public DbSet<SimFormat> SimTypes { get; set; }
+    public DbSet<SimFormat> SimFormats { get; set; }
     public DbSet<NavigationSystem> NavigationSystems { get; set; }
     public DbSet<UsbFeature> UsbFeatures { get; set; }
     public DbSet<UsbConnector> UsbConnectors { get; set; }
     public DbSet<WiFiStandard> WiFiStandards { get; set; }
-    public DbSet<AudioCodec> Codecs { get; set; }
+    public DbSet<AudioCodec> AudioCodecs { get; set; }
     public DbSet<SpeakerType> Speakers { get; set; }
     public DbSet<Domain.OperatingSystem> OperatingSystems { get; set; }
     public DbSet<Distribution> Distributions { get; set; }
     public DbSet<Sensor> Sensors { get; set; }
     public DbSet<HdrFormat> HdrFormats { get; set; }
-    public DbSet<ScreenMatriceTechnology> Panels { get; set; }
+    public DbSet<ScreenMatriceTechnology> MatriceTechnologies { get; set; }
     public DbSet<RamType> RamTypes { get; set; }
     public DbSet<StorageType> StorageTypes { get; set; }
     public DbSet<LensType> LensTypes { get; set; }
-    public DbSet<ImageStabilization> Stabilizations { get; set; }
+    public DbSet<ImageStabilization> ImageStabilizations { get; set; }
     public DbSet<Autofocus> Autofocuses { get; set; }
     public DbSet<FingerprintLocation> FingerprintLocations { get; set; }
     public DbSet<Material> Materials { get; set; }
@@ -154,7 +153,7 @@ public sealed class ApplicationDbContext : DbContext
             Model = "SomeGPU 666",
         };
 
-        var soc = new SoC
+        var soc = new Soc
         {
             Cpu = cpu,
             Gpu = gpu,
@@ -166,7 +165,7 @@ public sealed class ApplicationDbContext : DbContext
 
         var sound = new Sound
         {
-            Codecs = Codecs.Where(c => c.Id == AudioCodec.aptX.Id).ToList(),
+            Codecs = AudioCodecs.Where(c => c.Id == AudioCodec.aptX.Id).ToList(),
             SpeakerType = Speakers.First(s => s.Id == SpeakerType.Stereo.Id),
             HasFmRadio = false,
             HasHeadphoneJack = false,
@@ -195,15 +194,15 @@ public sealed class ApplicationDbContext : DbContext
         var screen = new Screen
         {
             AspectRatio = 19.3 / 9,
-            HasDCDimming = true,
-            HDRBrightness = 6666,
-            HDRFormat = HdrFormats.First(h => h.Id == HdrFormat.HDR10Plus.Id),
-            HDRSupport = true,
+            HasDcDimming = true,
+            HdrBrightness = 6666,
+            HdrFormat = HdrFormats.First(h => h.Id == HdrFormat.HDR10Plus.Id),
+            HdrSupport = true,
             HeightInPixels = 3088,
             MaxBrightness = 1200,
             MaxRefreshRatio = 144,
             MinRefreshRatio = 1,
-            ScreenMatriceTechnology = Panels.First(p => p.Id == ScreenMatriceTechnology.OLED.Id),
+            MatriceTechnology = MatriceTechnologies.First(p => p.Id == ScreenMatriceTechnology.OLED.Id),
             WidthInPixels = 1440,
             Size = 6.8,
         };
@@ -262,7 +261,7 @@ public sealed class ApplicationDbContext : DbContext
                 )
                .ToList(),
             MultiSimMode = MultiSimModes.First(m => m == MultiSimMode.Standby),
-            SimType = SimTypes.Where(
+            SimFormats = SimFormats.Where(
                     s => new List<SimFormat>()
                     {
                         SimFormat.Embedded,
@@ -305,7 +304,7 @@ public sealed class ApplicationDbContext : DbContext
                     }.Contains(ns)
                 )
                .ToList(),
-            USB = new Usb
+            Usb = new Usb
             {
                 Connector = UsbConnectors.First(c => c == UsbConnector.C),
                 Version = "3.1",
@@ -405,7 +404,7 @@ public sealed class ApplicationDbContext : DbContext
                     MaxHeight = 12000,
                     MaxWidth = 6000,
                 },
-                ImageStabilization = Stabilizations.First(s => s == ImageStabilization.Optical),
+                Stabilization = ImageStabilizations.First(s => s == ImageStabilization.Optical),
                 PixelSize = 1.4,
                 VideoCapabilities = new VideoCapabilities
                 {
@@ -445,7 +444,7 @@ public sealed class ApplicationDbContext : DbContext
                     MaxHeight = 12000,
                     MaxWidth = 6000,
                 },
-                ImageStabilization = Stabilizations.First(s => s == ImageStabilization.Optical),
+                Stabilization = ImageStabilizations.First(s => s == ImageStabilization.Optical),
                 PixelSize = 1.4,
                 VideoCapabilities = new VideoCapabilities
                 {
@@ -485,7 +484,7 @@ public sealed class ApplicationDbContext : DbContext
                     MaxHeight = 12000,
                     MaxWidth = 6000,
                 },
-                ImageStabilization = Stabilizations.First(s => s == ImageStabilization.Optical),
+                Stabilization = ImageStabilizations.First(s => s == ImageStabilization.Optical),
                 PixelSize = 1.4,
                 VideoCapabilities = new VideoCapabilities
                 {
@@ -520,7 +519,7 @@ public sealed class ApplicationDbContext : DbContext
         var smartphone1 = new Smartphone()
         {
             Charging = charging,
-            SoC = soc,
+            Soc = soc,
             Sound = sound,
             Software = software,
             Sensors = Sensors.Where(
@@ -610,7 +609,7 @@ public sealed class ApplicationDbContext : DbContext
             Model = "SomeGPU 666",
         };
 
-        var soc2 = new SoC
+        var soc2 = new Soc
         {
             Cpu = cpu2,
             Gpu = gpu2,
@@ -622,7 +621,7 @@ public sealed class ApplicationDbContext : DbContext
 
         var sound2 = new Sound
         {
-            Codecs = Codecs.Where(c => c.Id == AudioCodec.aptX.Id).ToList(),
+            Codecs = AudioCodecs.Where(c => c.Id == AudioCodec.aptX.Id).ToList(),
             SpeakerType = Speakers.First(s => s.Id == SpeakerType.Stereo.Id),
             HasFmRadio = false,
             HasHeadphoneJack = false,
@@ -647,15 +646,15 @@ public sealed class ApplicationDbContext : DbContext
         var screen2 = new Screen
         {
             AspectRatio = 19.3 / 9,
-            HasDCDimming = true,
-            HDRBrightness = 6666,
-            HDRFormat = HdrFormats.First(h => h == HdrFormat.HDR10Plus),
-            HDRSupport = true,
+            HasDcDimming = true,
+            HdrBrightness = 6666,
+            HdrFormat = HdrFormats.First(h => h == HdrFormat.HDR10Plus),
+            HdrSupport = true,
             HeightInPixels = 3088,
             MaxBrightness = 1200,
             MaxRefreshRatio = 144,
             MinRefreshRatio = 1,
-            ScreenMatriceTechnology = Panels.First(p => p == ScreenMatriceTechnology.OLED),
+            MatriceTechnology = MatriceTechnologies.First(p => p == ScreenMatriceTechnology.OLED),
             WidthInPixels = 1440,
             Size = 6.8,
         };
@@ -714,7 +713,7 @@ public sealed class ApplicationDbContext : DbContext
                 )
                .ToList(),
             MultiSimMode = MultiSimModes.First(m => m == MultiSimMode.Standby),
-            SimType = SimTypes.Where(
+            SimFormats = SimFormats.Where(
                     s => new List<SimFormat>()
                     {
                         SimFormat.Embedded,
@@ -757,7 +756,7 @@ public sealed class ApplicationDbContext : DbContext
                     }.Contains(ns)
                 )
                .ToList(),
-            USB = new Usb
+            Usb = new Usb
             {
                 Connector = UsbConnectors.First(c => c == UsbConnector.C),
                 Version = "3.1",
@@ -857,7 +856,7 @@ public sealed class ApplicationDbContext : DbContext
                     MaxHeight = 12000,
                     MaxWidth = 6000,
                 },
-                ImageStabilization = Stabilizations.First(s => s == ImageStabilization.Optical),
+                Stabilization = ImageStabilizations.First(s => s == ImageStabilization.Optical),
                 PixelSize = 1.4,
                 VideoCapabilities = new VideoCapabilities
                 {
@@ -892,7 +891,7 @@ public sealed class ApplicationDbContext : DbContext
         var smartphone2 = new Smartphone()
         {
             Charging = charging2,
-            SoC = soc2,
+            Soc = soc2,
             Sound = sound2,
             Software = software2,
             Sensors = Sensors.Where(
@@ -924,7 +923,7 @@ public sealed class ApplicationDbContext : DbContext
         var smartphone3 = new Smartphone()
         {
             Charging = charging2,
-            SoC = soc2,
+            Soc = soc2,
             Sound = sound2,
             Software = software2,
             Sensors = Sensors.Where(
@@ -956,7 +955,7 @@ public sealed class ApplicationDbContext : DbContext
         var smartphone4 = new Smartphone()
         {
             Charging = charging,
-            SoC = soc,
+            Soc = soc,
             Sound = sound,
             Software = software2,
             Sensors = Sensors.Where(
@@ -988,7 +987,7 @@ public sealed class ApplicationDbContext : DbContext
         var smartphone5 = new Smartphone()
         {
             Charging = charging,
-            SoC = soc,
+            Soc = soc,
             Sound = sound,
             Software = software2,
             Sensors = Sensors.Where(
@@ -1020,7 +1019,7 @@ public sealed class ApplicationDbContext : DbContext
         var smartphone6 = new Smartphone()
         {
             Charging = charging,
-            SoC = soc,
+            Soc = soc,
             Sound = sound,
             Software = software2,
             Sensors = Sensors.Where(
@@ -1052,7 +1051,7 @@ public sealed class ApplicationDbContext : DbContext
         var smartphone7 = new Smartphone()
         {
             Charging = charging,
-            SoC = soc,
+            Soc = soc,
             Sound = sound,
             Software = software2,
             Sensors = Sensors.Where(
@@ -1084,7 +1083,7 @@ public sealed class ApplicationDbContext : DbContext
         var smartphone8 = new Smartphone()
         {
             Charging = charging,
-            SoC = soc,
+            Soc = soc,
             Sound = sound,
             Software = software2,
             Sensors = Sensors.Where(

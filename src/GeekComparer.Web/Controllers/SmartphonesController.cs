@@ -1,20 +1,23 @@
+using System.Text.Json;
 using GeekComparer.Infrastructure;
+using GeekComparer.Infrastructure.DTOs;
+using GeekComparer.Infrastructure.Mappers;
 using GeekComparer.Web.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Caching.Distributed;
 
 namespace GeekComparer.Web.Controllers;
 
 public class SmartphonesController : Controller
 {
     private readonly ApplicationDbContext _db;
-    private readonly IMemoryCache _memoryCache; //TODO: use memory cache for caching smartphones
+    private readonly IDistributedCache _cache;
 
-    public SmartphonesController(ApplicationDbContext db, IMemoryCache memoryCache)
+    public SmartphonesController(ApplicationDbContext db, IDistributedCache cache)
     {
         _db = db;
-        _memoryCache = memoryCache;
+        _cache = cache;
     }
 
     [HttpGet]
@@ -23,13 +26,63 @@ public class SmartphonesController : Controller
         if (comparedIds.Count == 0)
             return RedirectToAction("AddFirst");
 
-        var allSmartphones = _db.Smartphones.ToList();
-
         var vm = new SmartphonesViewModel();
-        vm.NotCompared = allSmartphones.Where(s => !comparedIds.Contains(s.Id)).ToList();
 
-        foreach (var smartphoneGuid in comparedIds)
-            vm.Compared.Add(allSmartphones.First(s => s.Id == smartphoneGuid));
+        var cachedAllSmartphonesJson = _cache.GetString("all.smartphones:");
+
+        if (!string.IsNullOrEmpty(cachedAllSmartphonesJson))
+        {
+            //TODO: exclude smartphones that are already in the comparison
+            vm.NotCompared = JsonSerializer.Deserialize<List<string>>(cachedAllSmartphonesJson)!;
+        }
+        else
+        {
+            vm.NotCompared = _db.Smartphones.AsNoTracking()
+               .IgnoreAutoIncludes()
+               .Select(
+                    sm => sm.Manufacturer
+                        + " "
+                        + (sm.Brand == sm.Manufacturer ? string.Empty
+                            : sm.Brand + " ")
+                        + sm.Model
+                )
+               .ToList();
+
+            _cache.SetString(
+                "all.smartphones:",
+                JsonSerializer.Serialize(vm.NotCompared),
+                new DistributedCacheEntryOptions { SlidingExpiration = TimeSpan.FromMinutes(20), }
+            );
+        }
+
+        foreach (var comparedId in comparedIds)
+        {
+            var cachedSmartphoneJson = _cache.GetString(comparedId + ":");
+
+            if (!string.IsNullOrEmpty(cachedSmartphoneJson))
+            {
+                var cachedSmartphone =
+                    JsonSerializer.Deserialize<SmartphoneDto>(cachedSmartphoneJson);
+
+                if (cachedSmartphone is not null)
+                    vm.Compared.Add(cachedSmartphone);
+            }
+            else
+            {
+                var smartphone = SmartphoneMapper.ToDto(
+                    _db.Smartphones.AsNoTracking().First(sm => sm.Id == comparedId)
+                );
+
+                vm.Compared.Add(smartphone);
+
+                _cache.SetString(
+                    comparedId + ":",
+                    JsonSerializer.Serialize(smartphone),
+                    new DistributedCacheEntryOptions
+                        { SlidingExpiration = TimeSpan.FromMinutes(20), }
+                );
+            }
+        }
 
         return View(vm);
     }
@@ -37,23 +90,47 @@ public class SmartphonesController : Controller
     [HttpGet]
     public IActionResult AddFirst()
     {
-        var smartphones = _db.Smartphones.ToList();
+        List<string> list;
 
-        return View(smartphones);
+        var cachedAllSmartphonesJson = _cache.GetString("all.smartphones:");
+
+        if (!string.IsNullOrEmpty(cachedAllSmartphonesJson))
+        {
+            list = JsonSerializer.Deserialize<List<string>>(cachedAllSmartphonesJson)!;
+        }
+        else
+        {
+            list = _db.Smartphones.AsNoTracking()
+               .IgnoreAutoIncludes()
+               .ToList()
+               .Select(
+                    sm => sm.Manufacturer
+                        + " "
+                        + (sm.Brand == sm.Manufacturer ? string.Empty
+                            : sm.Brand + " ")
+                        + sm.Model
+                )
+               .ToList();
+
+            _cache.SetString("all.smartphones:", JsonSerializer.Serialize(list));
+        }
+
+        return View(list);
     }
 
     [HttpPost]
-    public IActionResult AddToComparison(string chosen, List<Guid> comparedIds)
+    public IActionResult AddToComparison(string chosen, HashSet<Guid> comparedIds)
     {
         var splitted = chosen.Split(' ', StringSplitOptions.RemoveEmptyEntries);
 
-        var manufacturer = splitted[0]; //TODO: handle phones like Xiaomi 13 Ultra
+        var manufacturer = splitted[0];
         var brand = splitted[1];
         var model = string.Join(' ', splitted.Skip(2));
 
-        var possible = _db.Smartphones.IgnoreAutoIncludes()
-           .Where(sm => sm.Manufacturer == manufacturer)
-           .Where(sm => sm.Brand == brand).ToList();
+        var possible = _db.Smartphones.AsNoTracking()
+           .IgnoreAutoIncludes()
+           .Where(sm => sm.Manufacturer == manufacturer && sm.Brand == brand)
+           .ToList();
 
         if (possible.Count == 0)
         {
@@ -61,10 +138,11 @@ public class SmartphonesController : Controller
             model = string.Join(' ', splitted.Skip(1));
         }
 
-
-        var idToAdd = _db.Smartphones.Where(s => s.Manufacturer == manufacturer)
-           .Where(s => s.Brand == brand)
-           .First(s => s.Model == model)
+        var idToAdd = _db.Smartphones.AsNoTracking()
+           .IgnoreAutoIncludes()
+           .FirstOrDefault(
+                s => s.Manufacturer == manufacturer && s.Brand == brand && s.Model == model
+            )
           ?.Id;
 
         if (idToAdd.HasValue)
