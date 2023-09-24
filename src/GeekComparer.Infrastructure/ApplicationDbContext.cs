@@ -1,4 +1,6 @@
 using CSharpFunctionalExtensions;
+using GeekComparer.Domain.Enums;
+using GeekComparer.Domain.ValueObjects;
 using GeekComparer.Infrastructure.Converters;
 
 namespace GeekComparer.Infrastructure;
@@ -30,15 +32,15 @@ public sealed class ApplicationDbContext : DbContext
     public DbSet<Cellular> Cellulars { get; set; }
     public DbSet<WiFi> WiFis { get; set; }
     public DbSet<Bluetooth> Bluetooths { get; set; }
-    public DbSet<USB> Usbs { get; set; }
+    public DbSet<Usb> Usbs { get; set; }
     public DbSet<Memory> Memories { get; set; }
-    public DbSet<RAM> Rams { get; set; }
+    public DbSet<Ram> Rams { get; set; }
     public DbSet<Storage> Storages { get; set; }
     public DbSet<Screen> Screens { get; set; }
     public DbSet<Security> Securities { get; set; }
     public DbSet<SoC> SoCs { get; set; }
-    public DbSet<GPU> Gpus { get; set; }
-    public DbSet<CPU> Cpus { get; set; }
+    public DbSet<Gpu> Gpus { get; set; }
+    public DbSet<Cpu> Cpus { get; set; }
     public DbSet<Core> Cores { get; set; }
     public DbSet<Software> Softwares { get; set; }
     public DbSet<Sound> Sounds { get; set; }
@@ -48,24 +50,24 @@ public sealed class ApplicationDbContext : DbContext
     public DbSet<ThreeGBand> ThreeGBands { get; set; }
     public DbSet<FourGBand> FourGBands { get; set; }
     public DbSet<FiveGBand> FiveGBands { get; set; }
-    public DbSet<Category> Categories { get; set; }
+    public DbSet<MarketSegment> Categories { get; set; }
     public DbSet<MultiSimMode> MultiSimModes { get; set; }
-    public DbSet<SimType> SimTypes { get; set; }
+    public DbSet<SimFormat> SimTypes { get; set; }
     public DbSet<NavigationSystem> NavigationSystems { get; set; }
     public DbSet<UsbFeature> UsbFeatures { get; set; }
     public DbSet<UsbConnector> UsbConnectors { get; set; }
     public DbSet<WiFiStandard> WiFiStandards { get; set; }
-    public DbSet<Codec> Codecs { get; set; }
+    public DbSet<AudioCodec> Codecs { get; set; }
     public DbSet<SpeakerType> Speakers { get; set; }
     public DbSet<Domain.OperatingSystem> OperatingSystems { get; set; }
     public DbSet<Distribution> Distributions { get; set; }
     public DbSet<Sensor> Sensors { get; set; }
     public DbSet<HdrFormat> HdrFormats { get; set; }
-    public DbSet<Panel> Panels { get; set; }
+    public DbSet<ScreenMatriceTechnology> Panels { get; set; }
     public DbSet<RamType> RamTypes { get; set; }
     public DbSet<StorageType> StorageTypes { get; set; }
     public DbSet<LensType> LensTypes { get; set; }
-    public DbSet<Stabilization> Stabilizations { get; set; }
+    public DbSet<ImageStabilization> Stabilizations { get; set; }
     public DbSet<Autofocus> Autofocuses { get; set; }
     public DbSet<FingerprintLocation> FingerprintLocations { get; set; }
     public DbSet<Material> Materials { get; set; }
@@ -141,21 +143,21 @@ public sealed class ApplicationDbContext : DbContext
             cores.Add(slow);
         }
 
-        var cpu = new CPU
+        var cpu = new Cpu
         {
             Cores = cores,
-            TDP = 5,
+            Tdp = 5,
         };
 
-        var gpu = new GPU
+        var gpu = new Gpu
         {
             Model = "SomeGPU 666",
         };
 
         var soc = new SoC
         {
-            CPU = cpu,
-            GPU = gpu,
+            Cpu = cpu,
+            Gpu = gpu,
             LaunchDate = new DateOnly(2023, 9, 9),
             Litography = 5,
             Manufacturer = "MediaTek",
@@ -164,7 +166,7 @@ public sealed class ApplicationDbContext : DbContext
 
         var sound = new Sound
         {
-            Codecs = Codecs.Where(c => c.Id == Codec.aptX.Id).ToList(),
+            Codecs = Codecs.Where(c => c.Id == AudioCodec.aptX.Id).ToList(),
             SpeakerType = Speakers.First(s => s.Id == SpeakerType.Stereo.Id),
             HasFmRadio = false,
             HasHeadphoneJack = false,
@@ -201,7 +203,7 @@ public sealed class ApplicationDbContext : DbContext
             MaxBrightness = 1200,
             MaxRefreshRatio = 144,
             MinRefreshRatio = 1,
-            Panel = Panels.First(p => p.Id == Panel.OLED.Id),
+            ScreenMatriceTechnology = Panels.First(p => p.Id == ScreenMatriceTechnology.OLED.Id),
             WidthInPixels = 1440,
             Size = 6.8,
         };
@@ -209,7 +211,7 @@ public sealed class ApplicationDbContext : DbContext
         var memory = new Memory
         {
             MemoryCardSupported = false,
-            RAM = new RAM
+            Ram = new Ram
             {
                 Channels = 4,
                 Clock = 2400,
@@ -261,10 +263,10 @@ public sealed class ApplicationDbContext : DbContext
                .ToList(),
             MultiSimMode = MultiSimModes.First(m => m == MultiSimMode.Standby),
             SimType = SimTypes.Where(
-                    s => new List<SimType>()
+                    s => new List<SimFormat>()
                     {
-                        SimType.Embedded,
-                        SimType.Nano,
+                        SimFormat.Embedded,
+                        SimFormat.Nano,
                     }.Contains(s)
                 )
                .ToList(),
@@ -303,7 +305,7 @@ public sealed class ApplicationDbContext : DbContext
                     }.Contains(ns)
                 )
                .ToList(),
-            USB = new USB
+            USB = new Usb
             {
                 Connector = UsbConnectors.First(c => c == UsbConnector.C),
                 Version = "3.1",
@@ -341,7 +343,7 @@ public sealed class ApplicationDbContext : DbContext
             Color = "Black",
             FingerprintLocation = FingerprintLocations.First(f => f == FingerprintLocation.Button),
             Height = 180,
-            IPRating = "IP68",
+            IpRating = "IP68",
             ScreenProtection = "Corning Gorilla Glass Victus",
             Thickness = 9,
             Weight = 210,
@@ -352,11 +354,11 @@ public sealed class ApplicationDbContext : DbContext
         {
             Antutu = new AntutuBenchmark
             {
-                CPU = 500_000,
-                GPU = 500_000,
-                MEM = 500_000,
+                Cpu = 500_000,
+                Gpu = 500_000,
+                Mem = 500_000,
                 Total = 2_000_000,
-                UX = 500_000,
+                Ux = 500_000,
             },
             DxOMark = new DxOMarkBenchmark
             {
@@ -403,7 +405,7 @@ public sealed class ApplicationDbContext : DbContext
                     MaxHeight = 12000,
                     MaxWidth = 6000,
                 },
-                Stabilization = Stabilizations.First(s => s == Stabilization.Optical),
+                ImageStabilization = Stabilizations.First(s => s == ImageStabilization.Optical),
                 PixelSize = 1.4,
                 VideoCapabilities = new VideoCapabilities
                 {
@@ -443,7 +445,7 @@ public sealed class ApplicationDbContext : DbContext
                     MaxHeight = 12000,
                     MaxWidth = 6000,
                 },
-                Stabilization = Stabilizations.First(s => s == Stabilization.Optical),
+                ImageStabilization = Stabilizations.First(s => s == ImageStabilization.Optical),
                 PixelSize = 1.4,
                 VideoCapabilities = new VideoCapabilities
                 {
@@ -483,7 +485,7 @@ public sealed class ApplicationDbContext : DbContext
                     MaxHeight = 12000,
                     MaxWidth = 6000,
                 },
-                Stabilization = Stabilizations.First(s => s == Stabilization.Optical),
+                ImageStabilization = Stabilizations.First(s => s == ImageStabilization.Optical),
                 PixelSize = 1.4,
                 VideoCapabilities = new VideoCapabilities
                 {
@@ -541,7 +543,7 @@ public sealed class ApplicationDbContext : DbContext
             Brand = "Samsung",
             Manufacturer = "Samsung",
             Model = "Galaxy S22 Ultra",
-            Category = Categories.First(c => c == Category.Flagship),
+            MarketSegment = Categories.First(c => c == MarketSegment.Flagship),
             Body = body,
             Benchmark = benchmark,
             Cameras = cameras,
@@ -597,21 +599,21 @@ public sealed class ApplicationDbContext : DbContext
             cores2.Add(slow);
         }
 
-        var cpu2 = new CPU
+        var cpu2 = new Cpu
         {
             Cores = cores2,
-            TDP = 5,
+            Tdp = 5,
         };
 
-        var gpu2 = new GPU
+        var gpu2 = new Gpu
         {
             Model = "SomeGPU 666",
         };
 
         var soc2 = new SoC
         {
-            CPU = cpu2,
-            GPU = gpu2,
+            Cpu = cpu2,
+            Gpu = gpu2,
             LaunchDate = new DateOnly(2023, 9, 9),
             Litography = 5,
             Manufacturer = "MediaTek",
@@ -620,7 +622,7 @@ public sealed class ApplicationDbContext : DbContext
 
         var sound2 = new Sound
         {
-            Codecs = Codecs.Where(c => c.Id == Codec.aptX.Id).ToList(),
+            Codecs = Codecs.Where(c => c.Id == AudioCodec.aptX.Id).ToList(),
             SpeakerType = Speakers.First(s => s.Id == SpeakerType.Stereo.Id),
             HasFmRadio = false,
             HasHeadphoneJack = false,
@@ -653,7 +655,7 @@ public sealed class ApplicationDbContext : DbContext
             MaxBrightness = 1200,
             MaxRefreshRatio = 144,
             MinRefreshRatio = 1,
-            Panel = Panels.First(p => p == Panel.OLED),
+            ScreenMatriceTechnology = Panels.First(p => p == ScreenMatriceTechnology.OLED),
             WidthInPixels = 1440,
             Size = 6.8,
         };
@@ -661,7 +663,7 @@ public sealed class ApplicationDbContext : DbContext
         var memory2 = new Memory
         {
             MemoryCardSupported = false,
-            RAM = new RAM
+            Ram = new Ram
             {
                 Channels = 4,
                 Clock = 2400,
@@ -713,10 +715,10 @@ public sealed class ApplicationDbContext : DbContext
                .ToList(),
             MultiSimMode = MultiSimModes.First(m => m == MultiSimMode.Standby),
             SimType = SimTypes.Where(
-                    s => new List<SimType>()
+                    s => new List<SimFormat>()
                     {
-                        SimType.Embedded,
-                        SimType.Nano,
+                        SimFormat.Embedded,
+                        SimFormat.Nano,
                     }.Contains(s)
                 )
                .ToList(),
@@ -755,7 +757,7 @@ public sealed class ApplicationDbContext : DbContext
                     }.Contains(ns)
                 )
                .ToList(),
-            USB = new USB
+            USB = new Usb
             {
                 Connector = UsbConnectors.First(c => c == UsbConnector.C),
                 Version = "3.1",
@@ -793,7 +795,7 @@ public sealed class ApplicationDbContext : DbContext
             Color = "Black",
             FingerprintLocation = FingerprintLocations.First(f => f == FingerprintLocation.Button),
             Height = 180,
-            IPRating = "IP68",
+            IpRating = "IP68",
             ScreenProtection = "Corning Gorilla Glass Victus",
             Thickness = 9,
             Weight = 210,
@@ -804,11 +806,11 @@ public sealed class ApplicationDbContext : DbContext
         {
             Antutu = new AntutuBenchmark
             {
-                CPU = 500_000,
-                GPU = 500_000,
-                MEM = 500_000,
+                Cpu = 500_000,
+                Gpu = 500_000,
+                Mem = 500_000,
                 Total = 2_000_000,
-                UX = 500_000,
+                Ux = 500_000,
             },
             DxOMark = new DxOMarkBenchmark
             {
@@ -855,7 +857,7 @@ public sealed class ApplicationDbContext : DbContext
                     MaxHeight = 12000,
                     MaxWidth = 6000,
                 },
-                Stabilization = Stabilizations.First(s => s == Stabilization.Optical),
+                ImageStabilization = Stabilizations.First(s => s == ImageStabilization.Optical),
                 PixelSize = 1.4,
                 VideoCapabilities = new VideoCapabilities
                 {
@@ -913,7 +915,7 @@ public sealed class ApplicationDbContext : DbContext
             Brand = "iPhone",
             Manufacturer = "Apple",
             Model = "14 Pro Max",
-            Category = Categories.First(c => c == Category.Flagship),
+            MarketSegment = Categories.First(c => c == MarketSegment.Flagship),
             Body = body2,
             Benchmark = benchmark2,
             Cameras = cameras2,
@@ -945,7 +947,7 @@ public sealed class ApplicationDbContext : DbContext
             Brand = "Xiaomi",
             Manufacturer = "Xiaomi",
             Model = "13 Ultra",
-            Category = Categories.First(c => c == Category.Flagship),
+            MarketSegment = Categories.First(c => c == MarketSegment.Flagship),
             Body = body2,
             Benchmark = benchmark2,
             Cameras = cameras2,
@@ -977,7 +979,7 @@ public sealed class ApplicationDbContext : DbContext
             Brand = "OnePlus",
             Manufacturer = "Vivo",
             Model = "Nord 2",
-            Category = Categories.First(c => c == Category.Mid),
+            MarketSegment = Categories.First(c => c == MarketSegment.Mid),
             Body = body2,
             Benchmark = benchmark2,
             Cameras = cameras,
@@ -1009,7 +1011,7 @@ public sealed class ApplicationDbContext : DbContext
             Brand = "Pixel",
             Manufacturer = "Google",
             Model = "6a",
-            Category = Categories.First(c => c == Category.Mid),
+            MarketSegment = Categories.First(c => c == MarketSegment.Mid),
             Body = body2,
             Benchmark = benchmark2,
             Cameras = cameras,
@@ -1041,7 +1043,7 @@ public sealed class ApplicationDbContext : DbContext
             Brand = "Realme",
             Manufacturer = "Realme",
             Model = "GT Neo 5",
-            Category = Categories.First(c => c == Category.Mid),
+            MarketSegment = Categories.First(c => c == MarketSegment.Mid),
             Body = body2,
             Benchmark = benchmark2,
             Cameras = cameras,
@@ -1073,7 +1075,7 @@ public sealed class ApplicationDbContext : DbContext
             Brand = "Tecno",
             Manufacturer = "Tecno",
             Model = "Camon 2",
-            Category = Categories.First(c => c == Category.Mid),
+            MarketSegment = Categories.First(c => c == MarketSegment.Mid),
             Body = body2,
             Benchmark = benchmark2,
             Cameras = cameras,
@@ -1105,7 +1107,7 @@ public sealed class ApplicationDbContext : DbContext
             Brand = "Alcatel",
             Manufacturer = "Alcatel",
             Model = "One Touch",
-            Category = Categories.First(c => c == Category.Mid),
+            MarketSegment = Categories.First(c => c == MarketSegment.Mid),
             Body = body2,
             Benchmark = benchmark2,
             Cameras = cameras,

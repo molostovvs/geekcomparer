@@ -19,10 +19,10 @@ namespace GeekComparer.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    CPU = table.Column<int>(type: "integer", nullable: false),
-                    GPU = table.Column<int>(type: "integer", nullable: false),
-                    MEM = table.Column<int>(type: "integer", nullable: false),
-                    UX = table.Column<int>(type: "integer", nullable: false),
+                    Cpu = table.Column<int>(type: "integer", nullable: false),
+                    Gpu = table.Column<int>(type: "integer", nullable: false),
+                    Mem = table.Column<int>(type: "integer", nullable: false),
+                    Ux = table.Column<int>(type: "integer", nullable: false),
                     Total = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
@@ -132,7 +132,7 @@ namespace GeekComparer.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    TDP = table.Column<int>(type: "integer", nullable: false)
+                    Tdp = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -582,14 +582,14 @@ namespace GeekComparer.Infrastructure.Migrations
                     InstructionSet = table.Column<string>(type: "text", nullable: false),
                     Microarchitecture = table.Column<string>(type: "text", nullable: false),
                     LaunchDate = table.Column<DateOnly>(type: "date", nullable: false),
-                    CPUId = table.Column<Guid>(type: "uuid", nullable: true)
+                    CpuId = table.Column<Guid>(type: "uuid", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Cores", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Cores_Cpus_CPUId",
-                        column: x => x.CPUId,
+                        name: "FK_Cores_Cpus_CpuId",
+                        column: x => x.CpuId,
                         principalTable: "Cpus",
                         principalColumn: "Id");
                 });
@@ -603,21 +603,21 @@ namespace GeekComparer.Infrastructure.Migrations
                     Model = table.Column<string>(type: "text", nullable: false),
                     LaunchDate = table.Column<DateOnly>(type: "date", nullable: false),
                     Litography = table.Column<int>(type: "integer", nullable: false),
-                    CPUId = table.Column<Guid>(type: "uuid", nullable: false),
-                    GPUId = table.Column<Guid>(type: "uuid", nullable: false)
+                    CpuId = table.Column<Guid>(type: "uuid", nullable: false),
+                    GpuId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_SoCs", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_SoCs_Cpus_CPUId",
-                        column: x => x.CPUId,
+                        name: "FK_SoCs_Cpus_CpuId",
+                        column: x => x.CpuId,
                         principalTable: "Cpus",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_SoCs_Gpus_GPUId",
-                        column: x => x.GPUId,
+                        name: "FK_SoCs_Gpus_GpuId",
+                        column: x => x.GpuId,
                         principalTable: "Gpus",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -632,7 +632,7 @@ namespace GeekComparer.Infrastructure.Migrations
                     Width = table.Column<double>(type: "double precision", nullable: false),
                     Thickness = table.Column<double>(type: "double precision", nullable: false),
                     Weight = table.Column<double>(type: "double precision", nullable: false),
-                    IPRating = table.Column<string>(type: "text", nullable: false),
+                    IpRating = table.Column<string>(type: "text", nullable: false),
                     ScreenProtection = table.Column<string>(type: "text", nullable: false),
                     FrameMaterialId = table.Column<int>(type: "integer", nullable: false),
                     BackMaterialId = table.Column<int>(type: "integer", nullable: false),
@@ -713,7 +713,7 @@ namespace GeekComparer.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    PanelId = table.Column<int>(type: "integer", nullable: false),
+                    ScreenMatriceTechnologyId = table.Column<int>(type: "integer", nullable: false),
                     Size = table.Column<double>(type: "double precision", nullable: false),
                     WidthInPixels = table.Column<int>(type: "integer", nullable: false),
                     HeightInPixels = table.Column<int>(type: "integer", nullable: false),
@@ -736,8 +736,8 @@ namespace GeekComparer.Infrastructure.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Screens_Panels_PanelId",
-                        column: x => x.PanelId,
+                        name: "FK_Screens_Panels_ScreenMatriceTechnologyId",
+                        column: x => x.ScreenMatriceTechnologyId,
                         principalTable: "Panels",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -874,7 +874,7 @@ namespace GeekComparer.Infrastructure.Migrations
                     PixelSize = table.Column<double>(type: "double precision", nullable: false),
                     SensorId = table.Column<Guid>(type: "uuid", nullable: false),
                     AutofocusId = table.Column<int>(type: "integer", nullable: false),
-                    StabilizationId = table.Column<int>(type: "integer", nullable: false),
+                    ImageStabilizationId = table.Column<int>(type: "integer", nullable: false),
                     HasOpticalZoom = table.Column<bool>(type: "boolean", nullable: false),
                     OpticalZoomValue = table.Column<int>(type: "integer", nullable: false),
                     DigitalZoomValue = table.Column<int>(type: "integer", nullable: false),
@@ -909,8 +909,8 @@ namespace GeekComparer.Infrastructure.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Cameras_Stabilizations_StabilizationId",
-                        column: x => x.StabilizationId,
+                        name: "FK_Cameras_Stabilizations_ImageStabilizationId",
+                        column: x => x.ImageStabilizationId,
                         principalTable: "Stabilizations",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -1014,7 +1014,7 @@ namespace GeekComparer.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CellularSimType",
+                name: "CellularSimFormat",
                 columns: table => new
                 {
                     CellularId = table.Column<Guid>(type: "uuid", nullable: false),
@@ -1022,15 +1022,15 @@ namespace GeekComparer.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CellularSimType", x => new { x.CellularId, x.SimTypeId });
+                    table.PrimaryKey("PK_CellularSimFormat", x => new { x.CellularId, x.SimTypeId });
                     table.ForeignKey(
-                        name: "FK_CellularSimType_Cellulars_CellularId",
+                        name: "FK_CellularSimFormat_Cellulars_CellularId",
                         column: x => x.CellularId,
                         principalTable: "Cellulars",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_CellularSimType_SimTypes_SimTypeId",
+                        name: "FK_CellularSimFormat_SimTypes_SimTypeId",
                         column: x => x.SimTypeId,
                         principalTable: "SimTypes",
                         principalColumn: "Id",
@@ -1086,7 +1086,7 @@ namespace GeekComparer.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CodecSound",
+                name: "AudioCodecSound",
                 columns: table => new
                 {
                     CodecsId = table.Column<int>(type: "integer", nullable: false),
@@ -1094,15 +1094,15 @@ namespace GeekComparer.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CodecSound", x => new { x.CodecsId, x.SoundId });
+                    table.PrimaryKey("PK_AudioCodecSound", x => new { x.CodecsId, x.SoundId });
                     table.ForeignKey(
-                        name: "FK_CodecSound_Codecs_CodecsId",
+                        name: "FK_AudioCodecSound_Codecs_CodecsId",
                         column: x => x.CodecsId,
                         principalTable: "Codecs",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_CodecSound_Sounds_SoundId",
+                        name: "FK_AudioCodecSound_Sounds_SoundId",
                         column: x => x.SoundId,
                         principalTable: "Sounds",
                         principalColumn: "Id",
@@ -1114,7 +1114,7 @@ namespace GeekComparer.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    RAMId = table.Column<Guid>(type: "uuid", nullable: false),
+                    RamId = table.Column<Guid>(type: "uuid", nullable: false),
                     StorageId = table.Column<Guid>(type: "uuid", nullable: false),
                     MemoryCardSupported = table.Column<bool>(type: "boolean", nullable: false)
                 },
@@ -1122,8 +1122,8 @@ namespace GeekComparer.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_Memories", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Memories_Rams_RAMId",
-                        column: x => x.RAMId,
+                        name: "FK_Memories_Rams_RamId",
+                        column: x => x.RamId,
                         principalTable: "Rams",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -1178,24 +1178,24 @@ namespace GeekComparer.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "USBUsbFeature",
+                name: "UsbUsbFeature",
                 columns: table => new
                 {
                     FeaturesId = table.Column<int>(type: "integer", nullable: false),
-                    USBId = table.Column<Guid>(type: "uuid", nullable: false)
+                    UsbId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_USBUsbFeature", x => new { x.FeaturesId, x.USBId });
+                    table.PrimaryKey("PK_UsbUsbFeature", x => new { x.FeaturesId, x.UsbId });
                     table.ForeignKey(
-                        name: "FK_USBUsbFeature_UsbFeatures_FeaturesId",
+                        name: "FK_UsbUsbFeature_UsbFeatures_FeaturesId",
                         column: x => x.FeaturesId,
                         principalTable: "UsbFeatures",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_USBUsbFeature_Usbs_USBId",
-                        column: x => x.USBId,
+                        name: "FK_UsbUsbFeature_Usbs_UsbId",
+                        column: x => x.UsbId,
                         principalTable: "Usbs",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -1245,7 +1245,7 @@ namespace GeekComparer.Infrastructure.Migrations
                     SoCId = table.Column<Guid>(type: "uuid", nullable: false),
                     SoftwareId = table.Column<Guid>(type: "uuid", nullable: false),
                     SoundId = table.Column<Guid>(type: "uuid", nullable: false),
-                    CategoryId = table.Column<int>(type: "integer", nullable: false),
+                    MarketSegmentId = table.Column<int>(type: "integer", nullable: false),
                     ChargingId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
@@ -1270,8 +1270,8 @@ namespace GeekComparer.Infrastructure.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Smartphones_Categories_CategoryId",
-                        column: x => x.CategoryId,
+                        name: "FK_Smartphones_Categories_MarketSegmentId",
+                        column: x => x.MarketSegmentId,
                         principalTable: "Categories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -1811,6 +1811,11 @@ namespace GeekComparer.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_AudioCodecSound_SoundId",
+                table: "AudioCodecSound",
+                column: "SoundId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Batteries_LifeId",
                 table: "Batteries",
                 column: "LifeId");
@@ -1861,6 +1866,11 @@ namespace GeekComparer.Infrastructure.Migrations
                 column: "AutofocusId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Cameras_ImageStabilizationId",
+                table: "Cameras",
+                column: "ImageStabilizationId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Cameras_LensTypeId",
                 table: "Cameras",
                 column: "LensTypeId");
@@ -1874,11 +1884,6 @@ namespace GeekComparer.Infrastructure.Migrations
                 name: "IX_Cameras_SensorId",
                 table: "Cameras",
                 column: "SensorId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Cameras_StabilizationId",
-                table: "Cameras",
-                column: "StabilizationId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Cameras_VideoCapabilitiesId",
@@ -1906,8 +1911,8 @@ namespace GeekComparer.Infrastructure.Migrations
                 column: "MultiSimModeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CellularSimType_SimTypeId",
-                table: "CellularSimType",
+                name: "IX_CellularSimFormat_SimTypeId",
+                table: "CellularSimFormat",
                 column: "SimTypeId");
 
             migrationBuilder.CreateIndex(
@@ -1919,11 +1924,6 @@ namespace GeekComparer.Infrastructure.Migrations
                 name: "IX_CellularTwoGBand_CellularId",
                 table: "CellularTwoGBand",
                 column: "CellularId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CodecSound_SoundId",
-                table: "CodecSound",
-                column: "SoundId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Connectivities_BluetoothId",
@@ -1951,14 +1951,14 @@ namespace GeekComparer.Infrastructure.Migrations
                 column: "NavigationSystemsId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Cores_CPUId",
+                name: "IX_Cores_CpuId",
                 table: "Cores",
-                column: "CPUId");
+                column: "CpuId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Memories_RAMId",
+                name: "IX_Memories_RamId",
                 table: "Memories",
-                column: "RAMId");
+                column: "RamId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Memories_StorageId",
@@ -1976,9 +1976,9 @@ namespace GeekComparer.Infrastructure.Migrations
                 column: "HDRFormatId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Screens_PanelId",
+                name: "IX_Screens_ScreenMatriceTechnologyId",
                 table: "Screens",
-                column: "PanelId");
+                column: "ScreenMatriceTechnologyId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_SensorSmartphone_SmartphoneId",
@@ -2006,11 +2006,6 @@ namespace GeekComparer.Infrastructure.Migrations
                 column: "Brand");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Smartphones_CategoryId",
-                table: "Smartphones",
-                column: "CategoryId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Smartphones_ChargingId",
                 table: "Smartphones",
                 column: "ChargingId");
@@ -2024,6 +2019,11 @@ namespace GeekComparer.Infrastructure.Migrations
                 name: "IX_Smartphones_Manufacturer",
                 table: "Smartphones",
                 column: "Manufacturer");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Smartphones_MarketSegmentId",
+                table: "Smartphones",
+                column: "MarketSegmentId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Smartphones_MemoryId",
@@ -2061,14 +2061,14 @@ namespace GeekComparer.Infrastructure.Migrations
                 column: "SoundId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SoCs_CPUId",
+                name: "IX_SoCs_CpuId",
                 table: "SoCs",
-                column: "CPUId");
+                column: "CpuId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SoCs_GPUId",
+                name: "IX_SoCs_GpuId",
                 table: "SoCs",
-                column: "GPUId");
+                column: "GpuId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Softwares_DistributionId",
@@ -2096,9 +2096,9 @@ namespace GeekComparer.Infrastructure.Migrations
                 column: "ConnectorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_USBUsbFeature_USBId",
-                table: "USBUsbFeature",
-                column: "USBId");
+                name: "IX_UsbUsbFeature_UsbId",
+                table: "UsbUsbFeature",
+                column: "UsbId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_VideoModes_VideoCapabilitiesId",
@@ -2115,6 +2115,9 @@ namespace GeekComparer.Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "AudioCodecSound");
+
+            migrationBuilder.DropTable(
                 name: "CameraSmartphone");
 
             migrationBuilder.DropTable(
@@ -2124,16 +2127,13 @@ namespace GeekComparer.Infrastructure.Migrations
                 name: "CellularFourGBand");
 
             migrationBuilder.DropTable(
-                name: "CellularSimType");
+                name: "CellularSimFormat");
 
             migrationBuilder.DropTable(
                 name: "CellularThreeGBand");
 
             migrationBuilder.DropTable(
                 name: "CellularTwoGBand");
-
-            migrationBuilder.DropTable(
-                name: "CodecSound");
 
             migrationBuilder.DropTable(
                 name: "ConnectivityNavigationSystem");
@@ -2145,13 +2145,16 @@ namespace GeekComparer.Infrastructure.Migrations
                 name: "SensorSmartphone");
 
             migrationBuilder.DropTable(
-                name: "USBUsbFeature");
+                name: "UsbUsbFeature");
 
             migrationBuilder.DropTable(
                 name: "VideoModes");
 
             migrationBuilder.DropTable(
                 name: "WiFiWiFiStandard");
+
+            migrationBuilder.DropTable(
+                name: "Codecs");
 
             migrationBuilder.DropTable(
                 name: "Cameras");
@@ -2170,9 +2173,6 @@ namespace GeekComparer.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "TwoGBands");
-
-            migrationBuilder.DropTable(
-                name: "Codecs");
 
             migrationBuilder.DropTable(
                 name: "NavigationSystems");

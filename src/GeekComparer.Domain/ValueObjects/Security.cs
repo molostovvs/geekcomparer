@@ -1,4 +1,4 @@
-namespace GeekComparer.Domain;
+namespace GeekComparer.Domain.ValueObjects;
 
 public class Security : ValueObject
 {

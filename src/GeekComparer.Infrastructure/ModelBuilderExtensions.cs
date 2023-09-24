@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Reflection;
 using CSharpFunctionalExtensions;
+using GeekComparer.Domain.ValueObjects;
 
 namespace GeekComparer.Infrastructure;
 
@@ -55,7 +56,7 @@ public static class ModelBuilderExtensions
         modelBuilder.Entity<Cellular>().HasMany(c => c.Bands3G).WithMany();
         modelBuilder.Entity<Cellular>().HasMany(c => c.Bands4G).WithMany();
         modelBuilder.Entity<Cellular>().HasMany(c => c.Bands5G).WithMany();
-        modelBuilder.Entity<USB>().HasMany(u => u.Features).WithMany();
+        modelBuilder.Entity<Usb>().HasMany(u => u.Features).WithMany();
         modelBuilder.Entity<WiFi>().HasMany(w => w.Standards).WithMany();
         modelBuilder.Entity<Smartphone>().HasMany(s => s.Sensors).WithMany();
         modelBuilder.Entity<Sound>().HasMany(s => s.Codecs).WithMany();
