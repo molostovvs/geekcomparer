@@ -1,0 +1,70 @@
+namespace GeekComparer.Domain.Enums;
+
+public class FiveGBand : EnumValueObject<FiveGBand, int>
+{
+    public static readonly FiveGBand n1 = new(1, nameof(n1));
+    public static readonly FiveGBand n2 = new(2, nameof(n2));
+    public static readonly FiveGBand n3 = new(3, nameof(n3));
+    public static readonly FiveGBand n5 = new(5, nameof(n5));
+    public static readonly FiveGBand n7 = new(7, nameof(n7));
+    public static readonly FiveGBand n8 = new(8, nameof(n8));
+    public static readonly FiveGBand n12 = new(12, nameof(n12));
+    public static readonly FiveGBand n13 = new(13, nameof(n13));
+    public static readonly FiveGBand n14 = new(14, nameof(n14));
+    public static readonly FiveGBand n18 = new(18, nameof(n18));
+    public static readonly FiveGBand n20 = new(20, nameof(n20));
+    public static readonly FiveGBand n24 = new(24, nameof(n24));
+    public static readonly FiveGBand n25 = new(25, nameof(n25));
+    public static readonly FiveGBand n26 = new(26, nameof(n26));
+    public static readonly FiveGBand n28 = new(28, nameof(n28));
+    public static readonly FiveGBand n29 = new(29, nameof(n29));
+    public static readonly FiveGBand n30 = new(30, nameof(n30));
+    public static readonly FiveGBand n34 = new(34, nameof(n34));
+    public static readonly FiveGBand n38 = new(38, nameof(n38));
+    public static readonly FiveGBand n39 = new(39, nameof(n39));
+    public static readonly FiveGBand n40 = new(40, nameof(n40));
+    public static readonly FiveGBand n41 = new(41, nameof(n41));
+    public static readonly FiveGBand n46 = new(46, nameof(n46));
+    public static readonly FiveGBand n47 = new(47, nameof(n47));
+    public static readonly FiveGBand n48 = new(48, nameof(n48));
+    public static readonly FiveGBand n50 = new(50, nameof(n50));
+    public static readonly FiveGBand n51 = new(51, nameof(n51));
+    public static readonly FiveGBand n53 = new(53, nameof(n53));
+    public static readonly FiveGBand n54 = new(54, nameof(n54));
+    public static readonly FiveGBand n65 = new(65, nameof(n65));
+    public static readonly FiveGBand n66 = new(66, nameof(n66));
+    public static readonly FiveGBand n67 = new(67, nameof(n67));
+    public static readonly FiveGBand n70 = new(70, nameof(n70));
+    public static readonly FiveGBand n71 = new(71, nameof(n71));
+    public static readonly FiveGBand n74 = new(74, nameof(n74));
+    public static readonly FiveGBand n75 = new(75, nameof(n75));
+    public static readonly FiveGBand n76 = new(76, nameof(n76));
+    public static readonly FiveGBand n77 = new(77, nameof(n77));
+    public static readonly FiveGBand n78 = new(78, nameof(n78));
+    public static readonly FiveGBand n79 = new(79, nameof(n79));
+    public static readonly FiveGBand n80 = new(80, nameof(n80));
+    public static readonly FiveGBand n81 = new(81, nameof(n81));
+    public static readonly FiveGBand n82 = new(82, nameof(n82));
+    public static readonly FiveGBand n83 = new(83, nameof(n83));
+    public static readonly FiveGBand n84 = new(84, nameof(n84));
+    public static readonly FiveGBand n85 = new(85, nameof(n85));
+    public static readonly FiveGBand n86 = new(86, nameof(n86));
+    public static readonly FiveGBand n89 = new(89, nameof(n89));
+    public static readonly FiveGBand n90 = new(90, nameof(n90));
+    public static readonly FiveGBand n91 = new(91, nameof(n91));
+    public static readonly FiveGBand n92 = new(92, nameof(n92));
+    public static readonly FiveGBand n93 = new(93, nameof(n93));
+    public static readonly FiveGBand n94 = new(94, nameof(n94));
+    public static readonly FiveGBand n95 = new(95, nameof(n95));
+    public static readonly FiveGBand n96 = new(96, nameof(n96));
+    public static readonly FiveGBand n97 = new(97, nameof(n97));
+    public static readonly FiveGBand n98 = new(98, nameof(n98));
+    public static readonly FiveGBand n99 = new(99, nameof(n99));
+    public static readonly FiveGBand n100 = new(100, nameof(n100));
+    public static readonly FiveGBand n101 = new(101, nameof(n101));
+    public static readonly FiveGBand n102 = new(102, nameof(n102));
+    public static readonly FiveGBand n104 = new(104, nameof(n104));
+    public static readonly FiveGBand n105 = new(105, nameof(n105));
+
+    private FiveGBand(int id, string name) : base(id, name) {}
+}

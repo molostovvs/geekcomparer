@@ -1,4 +1,4 @@
-namespace GeekComparer.Domain;
+namespace GeekComparer.Domain.Enums;
 
 public class Sensor : EnumValueObject<Sensor, int>
 {

@@ -175,7 +175,7 @@
     @foreach (var smartphone in Model.Compared)
     {
         <td>
-            @smartphone.Screen.Panel.Name
+            @smartphone.Screen.ScreenMatriceTechnology.Name
         </td>
     }
 </tr>
@@ -304,7 +304,7 @@
     @foreach (var smartphone in Model.Compared)
     {
         <td>
-            @smartphone.Body.IPRating
+            @smartphone.Body.IpRating
         </td>
     }
 </tr>
@@ -421,7 +421,7 @@
             <table class="inline-table">
                 <tr style="height: 100%">
                     @{
-                        var groupedCores = smartphone.SoC.CPU.Cores.GroupBy(c => new
+                        var groupedCores = smartphone.SoC.Cpu.Cores.GroupBy(c => new
                         {
                             c.Microarchitecture,
                             c.Clock,
@@ -439,7 +439,7 @@
                 </tr>
                 <tr style="height: 100%;">
                     <td>
-                        @smartphone.SoC.CPU.TDP
+                        @smartphone.SoC.Cpu.Tdp
                     </td>
                 </tr>
             </table>
@@ -471,10 +471,10 @@
         <td class="inline-table-parent" style="border-bottom: 1px solid black;">
             <table class="inline-table">
                 <tr>
-                    <td>@smartphone.SoC.GPU.Model</td>
+                    <td>@smartphone.SoC.Gpu.Model</td>
                 </tr>
                 <tr>
-                    <td>@smartphone.SoC.GPU.MaxClock</td>
+                    <td>@smartphone.SoC.Gpu.MaxClock</td>
                 </tr>
             </table>
         </td>
@@ -519,22 +519,22 @@
             <table class="inline-table">
                 <tr>
                     <td>
-                        @smartphone.Memory.RAM.Type
+                        @smartphone.Memory.Ram.Type
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        @smartphone.Memory.RAM.Size
+                        @smartphone.Memory.Ram.Size
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        @smartphone.Memory.RAM.Clock
+                        @smartphone.Memory.Ram.Clock
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        @smartphone.Memory.RAM.Channels
+                        @smartphone.Memory.Ram.Channels
                     </td>
                 </tr>
             </table>
@@ -1228,7 +1228,7 @@
                         <td>@smartphone.Cameras[i].Sensor.Format (TODO)</td>
                     </tr>
                     <tr>
-                        <td>@smartphone.Cameras[i].Stabilization</td>
+                        <td>@smartphone.Cameras[i].ImageStabilization</td>
                     </tr>
                     <tr>
                         <td>@smartphone.Cameras[i].FocalLength mm</td>
@@ -1324,16 +1324,16 @@
         <td class="inline-table-parent">
             <table class="inline-table">
                 <tr>
-                    <td>@smartphone.Benchmark.Antutu.CPU</td>
+                    <td>@smartphone.Benchmark.Antutu.Cpu</td>
                 </tr>
                 <tr>
-                    <td>@smartphone.Benchmark.Antutu.GPU</td>
+                    <td>@smartphone.Benchmark.Antutu.Gpu</td>
                 </tr>
                 <tr>
-                    <td>@smartphone.Benchmark.Antutu.MEM</td>
+                    <td>@smartphone.Benchmark.Antutu.Mem</td>
                 </tr>
                 <tr>
-                    <td>@smartphone.Benchmark.Antutu.UX</td>
+                    <td>@smartphone.Benchmark.Antutu.Ux</td>
                 </tr>
                 <tr>
                     <td style="border-bottom: 1px dotted black">@smartphone.Benchmark.Antutu.Total</td>
