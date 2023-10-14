@@ -1,18 +1,32 @@
 using System.Globalization;
-using CSharpFunctionalExtensions;
+using AngleSharp.Dom;
 
 namespace GeekComparer.Parser;
 
 public class PhonedbnetParser : ISmartphoneParser
 {
-    public static async Task<SmartphoneDto> Parse(string url)
+    internal class Row
+    {
+        public IElement? Key { get; set; }
+        public IElement? Value { get; set; }
+
+        public Row(IElement key, IElement value)
+        {
+            Key = key;
+            Value = value;
+        }
+
+        public Row() {}
+    }
+
+    public static SmartphoneDto Parse(string url)
     {
         var context = BrowsingContext.New(Configuration.Default.WithDefaultLoader());
-        var doc = await context.OpenAsync(url);
+        var doc = context.OpenAsync(url).Result;
 
         var rows = doc.QuerySelectorAll("tbody tr")
            .Select(
-                row => new
+                row => new Row
                 {
                     Key = row.QuerySelector("td:first-child"),
                     Value = row.QuerySelector("td:nth-child(2)"),
@@ -21,6 +35,13 @@ public class PhonedbnetParser : ISmartphoneParser
            .Where(t => t.Value is not null)
            .ToList();
 
+        var smartphone = ParseSmartphoneData(rows);
+
+        return smartphone;
+    }
+
+    private static SmartphoneDto ParseSmartphoneData(List<Row> rows)
+    {
         var smartphone = new SmartphoneDto();
 
         smartphone.Id = Guid.Empty;
@@ -33,17 +54,33 @@ public class PhonedbnetParser : ISmartphoneParser
             ?? throw new Exception();
         smartphone.AnnounceDate =
             DateOnly.Parse(
-                rows.First(t => t.Key?.TextContent == "Announced").Value?.TextContent,
+                (string)rows.First(t => t.Key?.TextContent == "Announced").Value?.TextContent,
                 new DateTimeFormatInfo()
             );
         smartphone.ReleaseDate =
             DateOnly.Parse(
-                rows.First(t => t.Key?.TextContent == "Released").Value?.TextContent,
+                (string)rows.First(t => t.Key?.TextContent == "Released").Value?.TextContent,
                 new DateTimeFormatInfo()
             );
 
         //TODO: parse market segment from somewhere else
         smartphone.MarketSegment = string.Empty;
+
+        var battery = new BatteryDto();
+
+        battery.Capacity =
+            int.Parse(
+                rows.First(r => r.Key.TextContent.Contains("Nominal Battery Capacity"))
+                   .Value?.TextContent.Split(" ")[0]
+            );
+
+        battery.Replaceable = rows.First(
+                r => r.Key?.TextContent == string.Empty && (r.Value.TextContent == "built-in"
+                    || r.Value.TextContent == "removable")
+            )
+           .Value.TextContent == "removable";
+
+        smartphone.Battery = battery;
 
         return smartphone;
     }

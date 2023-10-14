@@ -12,6 +12,6 @@ var titles = cells.Select(m => m.TextContent);*/
 const string address =
     "https://phonedb.net/index.php?m=device&id=14162&c=apple_iphone_xr_a2105_global_td-lte_64gb__apple_iphone_11,8";
 
-var dto = await PhonedbnetParser.Parse(address);
+var dto = PhonedbnetParser.Parse(address);
 
 dto.GetHashCode();
